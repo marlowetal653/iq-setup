@@ -6,9 +6,15 @@ A one-prompt setup tool for vibe coding students. Students paste a single prompt
 
 This repo contains setup instructions that **Claude Code reads and executes**. The `README.md` at the root is written for Claude, not for humans. You're reading the human version.
 
+## Before you start
+
+You need the **Claude desktop app** installed and signed in. Download it at https://claude.ai/download — you'll need a Claude Pro or Max subscription.
+
+Once the app is open, you can access Claude Code from the terminal inside it.
+
 ## How students use it
 
-1. Open Claude Code on their Mac
+1. Open the Claude desktop app and launch Claude Code
 2. Paste this prompt:
 
 ```
@@ -20,7 +26,7 @@ Read https://raw.githubusercontent.com/marlowetal653/iq-setup/main/README.md and
 ## What gets installed
 
 ### Developer Tools
-- **Homebrew** — Mac package manager
+- **Homebrew** (Mac) / **winget** (Windows) — Package manager
 - **Git** — Code version control
 - **Node.js + npm** — JavaScript runtime
 - **Supabase CLI** — Database management
@@ -54,6 +60,7 @@ Global Claude rules live in `config/CLAUDE.md`.
 
 ## Requirements
 
-- macOS (Apple Silicon or Intel)
-- Claude Code installed and logged in
+- macOS (Apple Silicon or Intel) or Windows 10/11
+- Claude desktop app installed and signed in (https://claude.ai/download)
+- A Claude Pro or Max subscription
 - An internet connection
