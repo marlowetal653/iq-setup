@@ -16,28 +16,34 @@ Before you begin, follow these rules throughout the entire setup:
 3. **Ask before acting.** Before running install commands, briefly tell the student what you're about to install and why. Wait for their OK.
 4. **Handle errors gracefully.** If something fails, explain what went wrong in plain language and suggest a fix.
 5. **One step at a time.** Do not rush. Complete each phase fully before moving to the next.
-6. **macOS only.** If the student is not on macOS, stop and explain that this setup currently only supports Mac.
+6. **Supports macOS and Windows.** Detect the OS in Phase 1 and follow the correct instructions for each platform throughout.
 7. **Be encouraging.** These are beginners. Celebrate small wins. Never make them feel dumb.
-8. **Never run interactive commands.** Some commands need the student to type, select options, or enter passwords. You CANNOT do this for them — Claude Code's terminal doesn't support interactive input. For these commands, tell the student to open their **Terminal** app (Cmd+Space, type "Terminal", press Enter) and type the command themselves. Walk them through every prompt they'll see. Wait for them to tell you they're done before continuing.
+8. **Never run interactive commands.** Some commands need the student to type, select options, or enter passwords. You CANNOT do this for them — Claude Code's terminal doesn't support interactive input. For these commands, tell the student to open their own terminal app and type the command themselves. On Mac: **Terminal** (Cmd+Space, type "Terminal", press Enter). On Windows: **PowerShell** (press Windows key, type "PowerShell", press Enter). Walk them through every prompt they'll see. Wait for them to tell you they're done before continuing.
 
 ---
 
 ## Phase 1 — System Check
 
-Run `uname -s` to confirm the student is on macOS (should return "Darwin").
-If not macOS, stop and tell them: "This setup is designed for Mac. We'll need a different approach for your operating system."
+Detect the student's operating system:
+```bash
+uname -s 2>/dev/null || echo "WINDOWS"
+```
 
-Also run `uname -m` to detect architecture:
-- `arm64` = Apple Silicon (M1/M2/M3/M4) — Homebrew installs to `/opt/homebrew/`
-- `x86_64` = Intel Mac — Homebrew installs to `/usr/local/`
+- If the output is `Darwin` → this is **macOS**. Also run `uname -m` to detect architecture:
+  - `arm64` = Apple Silicon (M1/M2/M3/M4) — Homebrew installs to `/opt/homebrew/`
+  - `x86_64` = Intel Mac — Homebrew installs to `/usr/local/`
+- If the output is `WINDOWS` or `MINGW` or `MSYS` or the command fails → this is **Windows**.
+- If the output is `Linux` → stop and tell them: "This setup currently supports Mac and Windows. Linux support is coming soon."
 
-Remember which architecture this is — it matters for Homebrew PATH setup.
+Remember the OS and architecture — follow the correct instructions for this platform in every phase below.
 
-Tell the student: "Your Mac is ready. Let's start installing the tools you need."
+Tell the student: "Your computer is ready. Let's start installing the tools you need."
 
 ---
 
-## Phase 2 — Install Homebrew
+## Phase 2 — Install Package Manager
+
+### On macOS — Install Homebrew
 
 Check if Homebrew is installed:
 ```bash
@@ -84,6 +90,16 @@ which brew
 - Tell the student: "Homebrew is already installed. Skipping."
 - Run `brew update` to make sure it's current.
 
+### On Windows — Verify winget
+
+Windows 11 comes with `winget` pre-installed. Verify it works:
+```bash
+winget --version
+```
+
+If it works: "Your package manager is ready."
+If it fails: Tell the student "winget should be pre-installed on Windows 11. Let's install it." Then have them open the **Microsoft Store** app and search for **App Installer** — install or update it.
+
 ---
 
 ## Phase 3 — Install Developer Tools
@@ -91,32 +107,64 @@ which brew
 For each tool below, check if it's already installed before installing. After each install, explain what the tool does in one simple sentence.
 
 ### 3a — Git
+
+Check:
 ```bash
-which git && git --version
+git --version
 ```
-If not installed: `brew install git`
+
+**On Mac** — if not installed: `brew install git`
+**On Windows** — if not installed:
+```bash
+winget install Git.Git --accept-package-agreements --accept-source-agreements
+```
+
 Tell them: "Git is how we track changes to your code — like version history in Google Docs."
 
 ### 3b — Node.js
+
+Check:
 ```bash
-which node && node --version
+node --version
 ```
-If not installed: `brew install node`
-After install, also verify npm: `which npm && npm --version`
+
+**On Mac** — if not installed: `brew install node`
+**On Windows** — if not installed:
+```bash
+winget install OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements
+```
+
+After install, also verify npm: `npm --version`
 Tell them: "Node.js runs JavaScript, which is the language your web app will use."
 
 ### 3c — Supabase CLI
+
+Check:
 ```bash
-which supabase
+supabase --version
 ```
-If not installed: `brew install supabase/tap/supabase`
+
+**On Mac** — if not installed: `brew install supabase/tap/supabase`
+**On Windows** — if not installed:
+```bash
+npm install -g supabase
+```
+
 Tell them: "Supabase is your database — it stores all the data for your app, like user accounts and content."
 
 ### 3d — GitHub CLI
+
+Check:
 ```bash
-which gh
+gh --version
 ```
-If not installed: `brew install gh`
+
+**On Mac** — if not installed: `brew install gh`
+**On Windows** — if not installed:
+```bash
+winget install GitHub.cli --accept-package-agreements --accept-source-agreements
+```
+
 Tell them: "GitHub CLI lets me connect your code to GitHub, which is like Google Drive for code."
 
 After all tools are installed, tell the student:
@@ -138,6 +186,11 @@ Now let's install some custom commands that will make your life easier."
 git clone https://github.com/marlowetal653/iq-setup.git /tmp/iq-setup
 ```
 
+On Windows, if `/tmp/` doesn't work, use:
+```bash
+git clone https://github.com/marlowetal653/iq-setup.git %TEMP%\iq-setup
+```
+
 ### 4b — Install skill files
 
 Create the commands directory if it doesn't exist:
@@ -155,6 +208,12 @@ cp /tmp/iq-setup/skills/save.md ~/.claude/commands/save.md
 cp /tmp/iq-setup/skills/sync.md ~/.claude/commands/sync.md
 cp /tmp/iq-setup/skills/deploy.md ~/.claude/commands/deploy.md
 ```
+
+On Windows, use `copy` if `cp` doesn't work:
+```bash
+copy %TEMP%\iq-setup\skills\preview.md %USERPROFILE%\.claude\commands\preview.md
+```
+(Repeat for each file)
 
 ### 4c — Install global Claude rules
 
@@ -174,8 +233,15 @@ cat /tmp/iq-setup/config/CLAUDE.md >> ~/.claude/CLAUDE.md
 ```
 
 ### 4d — Clean up
+
+**On Mac:**
 ```bash
 rm -rf /tmp/iq-setup
+```
+
+**On Windows:**
+```bash
+rmdir /s /q %TEMP%\iq-setup
 ```
 
 ### 4e — Tell the student what they got
@@ -199,7 +265,7 @@ I also installed some rules that make me work better — like automatically savi
 Claude Code normally asks for permission before running commands. For students, this is
 confusing and unnecessary — they don't know what they're approving anyway.
 
-Set up a shell alias so Claude always runs in auto-accept mode:
+### On macOS
 
 ```bash
 # Check if alias already exists
@@ -218,6 +284,20 @@ Then reload the shell config:
 source ~/.zshrc
 ```
 
+### On Windows
+
+Tell the student to open **PowerShell** and paste:
+```
+if (!(Test-Path $PROFILE)) { New-Item -Path $PROFILE -Force }
+Add-Content $PROFILE 'Set-Alias claude "claude --dangerously-skip-permissions"'
+```
+
+Note: If the PowerShell alias approach doesn't work reliably on Windows, an alternative
+is to tell the student to always launch Claude Code with:
+```
+claude --dangerously-skip-permissions
+```
+
 Tell the student: "I've configured Claude to run smoothly without asking you
 technical permission questions. This makes your experience much simpler."
 
@@ -229,7 +309,7 @@ MCP servers give Claude extra capabilities. We need to configure them in `~/.cla
 
 ### 6a — Add Playwright MCP (no authentication needed)
 
-Use python3 to safely modify the JSON config:
+Use python3 (or python on Windows) to safely modify the JSON config:
 
 ```bash
 python3 << 'PYEOF'
@@ -268,11 +348,14 @@ with open(config_path, "w") as f:
 PYEOF
 ```
 
+On Windows, if `python3` is not found, try `python` instead.
+If neither works, install Python: `winget install Python.Python.3 --accept-package-agreements --accept-source-agreements`
+
 Tell the student: "I've configured the Playwright browser testing tool. This lets me browse the web and test your app automatically."
 
 ### 6b — Supabase MCP (needs token — configured later)
 
-Do NOT add the Supabase MCP server yet. We need the student's access token first. We'll come back to this in Phase 7 after account setup.
+Do NOT add the Supabase MCP server yet. We need the student's access token first. We'll come back to this in Phase 8 after account setup.
 
 Tell the student: "We'll connect the Supabase database tool after we create your account in the next step."
 
@@ -308,11 +391,12 @@ IMPORTANT: `gh auth login` is an INTERACTIVE command. Do NOT run it yourself —
 
 Tell the student: "Now let's connect your GitHub account to Claude Code. This requires you to type a command yourself."
 
-1. Tell them to open their **Terminal** app (if not already open):
-   "Open Terminal again (Cmd+Space, type 'Terminal', Enter)."
+1. Tell them to open their terminal app (if not already open):
+   **On Mac:** "Open Terminal (Cmd+Space, type 'Terminal', Enter)."
+   **On Windows:** "Open PowerShell (press the Windows key, type 'PowerShell', Enter)."
 
 2. Give them the exact command to paste:
-   "Copy and paste this into Terminal and press Enter:"
+   "Copy and paste this into your terminal and press Enter:"
    ```
    gh auth login
    ```
@@ -324,7 +408,7 @@ Tell the student: "Now let's connect your GitHub account to Claude Code. This re
    - "It will show you a one-time code (something like ABC1-D2EF) — write it down or remember it"
    - "Press Enter — your browser will open"
    - "In the browser, paste or type the code and click **Authorize github**"
-   - "Go back to Terminal — you should see 'Logged in as [your username]'"
+   - "Go back to your terminal — you should see 'Logged in as [your username]'"
 
 4. Tell them: "Once you see 'Logged in as...', come back here and tell me."
 
@@ -427,12 +511,16 @@ print("SUCCESS: Supabase MCP server configured with access token.")
 PYEOF
 ```
 
+On Windows, use `python` instead of `python3` if needed.
+
 IMPORTANT: After adding the MCP server, Claude needs to restart to pick up the new configuration.
 
 Tell the student:
 "I've connected your Supabase account to Claude Code! For this to take effect, you need to restart Claude Code:
 
-1. Close this Claude Code window completely (Cmd+Q or type 'exit')
+1. Close this Claude Code window completely
+   **On Mac:** Cmd+Q or type 'exit'
+   **On Windows:** close the window or type 'exit'
 2. Open Claude Code again
 3. Start a new conversation
 
@@ -448,12 +536,20 @@ Run through this checklist and report results to the student:
 
 ```bash
 echo "=== Setup Verification ==="
-echo "Homebrew: $(brew --version 2>/dev/null | head -1 || echo 'NOT INSTALLED')"
 echo "Git: $(git --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "Node.js: $(node --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "npm: $(npm --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "Supabase CLI: $(supabase --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "GitHub CLI: $(gh --version 2>/dev/null | head -1 || echo 'NOT INSTALLED')"
+```
+
+On macOS, also check:
+```bash
+echo "Homebrew: $(brew --version 2>/dev/null | head -1 || echo 'NOT INSTALLED')"
+```
+
+Then check GitHub connection and Claude config:
+```bash
 echo ""
 echo "=== GitHub Connection ==="
 gh auth status 2>&1 | head -3
@@ -479,6 +575,8 @@ else:
 " 2>/dev/null
 ```
 
+On Windows, use `python` instead of `python3` and `dir` instead of `ls` if needed.
+
 Tell the student the results in plain language. For each item:
 - If it's installed/configured: Tell them it's good
 - If something is missing: Explain what needs to be fixed and help them fix it
@@ -492,7 +590,6 @@ Tell the student:
 "Setup is complete! Here's everything we installed and configured:
 
 **Developer Tools:**
-- Homebrew (package manager — installs other tools)
 - Git (tracks changes to your code)
 - Node.js + npm (runs your web app)
 - Supabase CLI (manages your database)
