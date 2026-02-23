@@ -18,6 +18,7 @@ Before you begin, follow these rules throughout the entire setup:
 5. **One step at a time.** Do not rush. Complete each phase fully before moving to the next.
 6. **macOS only.** If the student is not on macOS, stop and explain that this setup currently only supports Mac.
 7. **Be encouraging.** These are beginners. Celebrate small wins. Never make them feel dumb.
+8. **Never run interactive commands.** Some commands need the student to type, select options, or enter passwords. You CANNOT do this for them — Claude Code's terminal doesn't support interactive input. For these commands, tell the student to open their **Terminal** app (Cmd+Space, type "Terminal", press Enter) and type the command themselves. Walk them through every prompt they'll see. Wait for them to tell you they're done before continuing.
 
 ---
 
@@ -47,27 +48,37 @@ which brew
 
 1. Tell the student: "I need to install Homebrew. It's like an app store for developer tools — it's the standard way to install things on a Mac. It's safe and used by millions of developers."
 
-2. IMPORTANT: Before running the install, warn them:
+2. IMPORTANT — This is an INTERACTIVE install. You cannot run it yourself.
+   Tell the student to open their **Terminal** app:
+   "I need you to open the Terminal app on your Mac. Press Cmd+Space, type 'Terminal', and press Enter."
+
+3. Once they confirm Terminal is open, give them the command to paste:
+   "Copy and paste this command into Terminal, then press Enter:"
+   ```
+   NONINTERACTIVE=1 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+   ```
+
+4. Warn them about the password prompt:
    "Your Mac will ask for your password. This is your computer login password. When you type it, you won't see any dots or stars — that's completely normal. Just type it and press Enter."
 
-3. Run:
-```bash
-/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-```
+5. Tell them to let you know when they see "Installation successful!" or similar.
+   Wait for them to confirm before continuing.
 
-4. CRITICAL — After install, Homebrew needs to be added to PATH.
+6. CRITICAL — After install, Homebrew needs to be added to PATH.
+   Tell the student to also paste this into their Terminal:
    On Apple Silicon Macs (arm64):
-```bash
-echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
-eval "$(/opt/homebrew/bin/brew shellenv)"
-```
-   On Intel Macs (x86_64): Homebrew is already in PATH, no action needed.
+   ```
+   echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
+   eval "$(/opt/homebrew/bin/brew shellenv)"
+   ```
+   On Intel Macs (x86_64): No action needed — tell them to skip this step.
 
-5. If the install triggers a popup asking to install "Xcode Command Line Tools":
+7. If the install triggered a popup asking to install "Xcode Command Line Tools":
    Tell the student: "A popup appeared asking to install developer tools. Click 'Install' and wait — it can take 5-10 minutes. Let me know when it's done."
-   Wait for them to confirm, then retry the Homebrew install if needed.
+   Wait for them to confirm, then have them retry the Homebrew install command.
 
-6. Verify: `brew --version`
+8. Once they confirm it's done, come back to Claude Code and verify yourself:
+   `brew --version`
 
 **If already installed:**
 - Tell the student: "Homebrew is already installed. Skipping."
@@ -293,27 +304,37 @@ Ask the student: "Do you already have a GitHub account?"
 
 ### Step 7b — Connect GitHub to Claude Code
 
-Tell the student: "Now let's connect your GitHub account to this terminal so you can save and share your code."
+IMPORTANT: `gh auth login` is an INTERACTIVE command. Do NOT run it yourself — it will hang.
 
-1. Run:
-```bash
-gh auth login
-```
+Tell the student: "Now let's connect your GitHub account to Claude Code. This requires you to type a command yourself."
 
-2. Walk them through the interactive prompts:
-   - "When it asks 'Where do you use GitHub?', select **GitHub.com** and press Enter"
-   - "When it asks about protocol, select **HTTPS** and press Enter"
-   - "When it asks to authenticate, select **Login with a web browser** and press Enter"
-   - "It will show you a one-time code (like ABC1-D2EF). Copy this code"
-   - "Press Enter — it will open your browser"
-   - "In the browser, paste the code and click **Authorize github**"
+1. Tell them to open their **Terminal** app (if not already open):
+   "Open Terminal again (Cmd+Space, type 'Terminal', Enter)."
 
-3. Verify:
+2. Give them the exact command to paste:
+   "Copy and paste this into Terminal and press Enter:"
+   ```
+   gh auth login
+   ```
+
+3. Walk them through each prompt they'll see:
+   - "It will ask 'Where do you use GitHub?' — use the arrow keys to select **GitHub.com** and press Enter"
+   - "It will ask about protocol — select **HTTPS** and press Enter"
+   - "It will ask how to authenticate — select **Login with a web browser** and press Enter"
+   - "It will show you a one-time code (something like ABC1-D2EF) — write it down or remember it"
+   - "Press Enter — your browser will open"
+   - "In the browser, paste or type the code and click **Authorize github**"
+   - "Go back to Terminal — you should see 'Logged in as [your username]'"
+
+4. Tell them: "Once you see 'Logged in as...', come back here and tell me."
+
+5. When they confirm, verify it yourself (this command IS non-interactive):
 ```bash
 gh auth status
 ```
 
-Tell them: "GitHub is connected! Now let's set up your database."
+If `gh auth status` shows they're logged in: "GitHub is connected! Now let's set up your database."
+If not: Walk them through the `gh auth login` process again.
 
 ### Step 7c — Create Supabase Account
 
