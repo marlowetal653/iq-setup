@@ -167,12 +167,27 @@ winget install GitHub.cli --accept-package-agreements --accept-source-agreements
 
 Tell them: "GitHub CLI lets me connect your code to GitHub, which is like Google Drive for code."
 
+### 3e — Claude Code CLI
+
+Check:
+```bash
+claude --version
+```
+
+If not installed (on both Mac and Windows):
+```bash
+npm install -g @anthropic-ai/claude-code
+```
+
+Tell them: "Claude Code CLI lets you launch me directly from any terminal — not just the desktop app."
+
 After all tools are installed, tell the student:
 "All developer tools are installed. Here's what we set up:
 - Git (track code changes)
 - Node.js (run your app)
 - Supabase CLI (manage your database)
 - GitHub CLI (connect to GitHub)
+- Claude Code CLI (launch Claude from any terminal)
 
 Now let's install some custom commands that will make your life easier."
 
