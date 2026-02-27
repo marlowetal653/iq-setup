@@ -31,6 +31,7 @@ Read https://raw.githubusercontent.com/marlowetal653/iq-setup/main/README.md and
 - **Node.js + npm** — JavaScript runtime
 - **Supabase CLI** — Database management
 - **GitHub CLI** — Code hosting integration
+- **Netlify CLI** — App deployment
 
 ### MCP Servers (Claude superpowers)
 - **Playwright** — Browser automation and testing
@@ -44,11 +45,12 @@ Read https://raw.githubusercontent.com/marlowetal653/iq-setup/main/README.md and
 | `/master` | Build an app specification step by step (in French) |
 | `/save` | Git add + commit + push in one command |
 | `/sync` | Pull latest changes + update dependencies |
-| `/deploy` | Deploy to Vercel or Netlify |
+| `/deploy` | Deploy to Netlify |
 
 ### Accounts Created
 - **GitHub** — Where code lives
 - **Supabase** — Where the database lives
+- **Netlify** — Where the app goes live
 
 ## How to modify
 

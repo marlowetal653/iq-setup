@@ -181,6 +181,20 @@ npm install -g @anthropic-ai/claude-code
 
 Tell them: "Claude Code CLI lets you launch me directly from any terminal — not just the desktop app."
 
+### 3f — Netlify CLI
+
+Check:
+```bash
+netlify --version
+```
+
+If not installed (on both Mac and Windows):
+```bash
+npm install -g netlify-cli
+```
+
+Tell them: "Netlify is how we put your app live on the internet — it takes your code and makes it available to anyone with a link."
+
 After all tools are installed, tell the student:
 "All developer tools are installed. Here's what we set up:
 - Git (track code changes)
@@ -188,6 +202,7 @@ After all tools are installed, tell the student:
 - Supabase CLI (manage your database)
 - GitHub CLI (connect to GitHub)
 - Claude Code CLI (launch Claude from any terminal)
+- Netlify CLI (deploy your app to the internet)
 
 Now let's install some custom commands that will make your life easier."
 
@@ -483,6 +498,43 @@ Wait for them to paste the token. It should start with `sbp_`.
 If what they pasted doesn't start with `sbp_`:
 - Tell them: "That doesn't look right — the token should start with 'sbp_'. Can you try copying it again from the Supabase page?"
 
+### Step 7f — Create Netlify Account and Log In
+
+Tell the student: "Now let's set up Netlify — this is the service that will put your app live on the internet. We'll use your GitHub account to sign up, so no new password needed."
+
+1. Tell them to open **https://app.netlify.com/signup** in their browser
+2. "Click **GitHub** to sign up with your GitHub account"
+3. "On the GitHub page, click **Authorize netlify**"
+4. "You should now be on the Netlify dashboard!"
+
+Now log in to the Netlify CLI. This is an INTERACTIVE command — the student needs to run it themselves.
+
+5. Tell them to go back to their terminal app (the same one they used for `gh auth login`):
+   **On Mac:** "Go back to Terminal (or open it again: Cmd+Space, type 'Terminal', Enter)."
+   **On Windows:** "Go back to PowerShell (or open it again: Windows key, type 'PowerShell', Enter)."
+
+6. Give them the command to paste:
+   "Copy and paste this into your terminal and press Enter:"
+   ```
+   netlify login
+   ```
+
+7. Walk them through what happens:
+   - "Your browser will open automatically to a Netlify authorization page"
+   - "Click **Authorize**"
+   - "You'll see a message saying 'You're now logged in' — you can close that browser tab"
+   - "Go back to your terminal — you should see 'You are now logged in'"
+
+8. Tell them: "Once you see that confirmation, come back here and tell me."
+
+9. When they confirm, verify it yourself (this command IS non-interactive):
+```bash
+netlify status
+```
+
+If `netlify status` shows they're logged in: "Netlify is connected! When you're ready to put your app online, just type /deploy."
+If not: Walk them through `netlify login` again.
+
 ---
 
 ## Phase 8 — Connect Supabase to Claude
@@ -556,6 +608,7 @@ echo "Node.js: $(node --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "npm: $(npm --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "Supabase CLI: $(supabase --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "GitHub CLI: $(gh --version 2>/dev/null | head -1 || echo 'NOT INSTALLED')"
+echo "Netlify CLI: $(netlify --version 2>/dev/null || echo 'NOT INSTALLED')"
 ```
 
 On macOS, also check:
@@ -609,6 +662,7 @@ Tell the student:
 - Node.js + npm (runs your web app)
 - Supabase CLI (manages your database)
 - GitHub CLI (connects to GitHub)
+- Netlify CLI (deploys your app to the internet)
 
 **Claude Superpowers:**
 - Playwright (I can browse the web and test your app)
@@ -625,6 +679,7 @@ Tell the student:
 **Accounts:**
 - GitHub (your code lives here)
 - Supabase (your database lives here)
+- Netlify (your app goes live here)
 
 Remember to restart Claude Code to activate the Supabase connection!
 
