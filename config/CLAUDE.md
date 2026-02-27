@@ -1,23 +1,52 @@
 # Claude Rules
 
-## Compound Message Handling
+Rules below are MANDATORY. Follow them in every conversation, every task, every response.
 
-Compound messages must be split into phases.
+---
 
-If a user message contains BOTH:
-- an acceptance phrase (e.g. "looks good", "approved", "ok", "perfect"), AND
-- a new request, instruction, or task
+## 1. Commits
 
-THEN the following sequence is mandatory:
+- NEVER add "Co-Authored-By" lines to commit messages. No co-author tags, ever.
+- Keep commit messages short, clear, and in plain language. Describe WHAT changed, not HOW.
+- When the user approves your work (says "looks good", "ok", "perfect", etc.), commit immediately before doing anything else.
 
-### PHASE 1 — COMMIT
-1. Treat the acceptance phrase as approval of the current code state.
-2. Immediately stop all coding and analysis.
-3. Commit all current uncommitted changes.
-4. Generate a clear, descriptive commit message summarizing the approved work.
-5. Confirm that the commit is completed.
+---
 
-### PHASE 2 — NEW TASK
-6. Only after the commit is completed, begin work on the newly requested task.
-7. The new task must be treated as a fresh task with no carry-over assumptions.
-8. No code for the new task may be written before the commit exists.
+## 2. Compound Messages
+
+If a user message contains BOTH an approval ("looks good", "approved", "ok", "perfect") AND a new request:
+
+**Phase 1 — COMMIT first**
+1. Treat the approval as sign-off on current work.
+2. Stop all coding.
+3. Commit all uncommitted changes with a clear message.
+4. Confirm the commit is done.
+
+**Phase 2 — NEW TASK**
+5. Only then start the new request.
+6. Treat it as a fresh task — no carry-over assumptions.
+
+---
+
+## 3. Communication
+
+- Use simple, non-technical language. The user is not a developer.
+- After completing a task, explain WHAT you did, not HOW (no code explanations unless asked).
+- Never ask technical questions the user can't answer. Make the decision yourself and explain what you chose.
+
+---
+
+## 4. Code Quality
+
+- Keep code simple. No over-engineering, no unnecessary abstractions.
+- Fix errors completely — don't just report them and wait. Attempt the fix, then report results.
+- Follow the project's existing patterns and style. Don't introduce new frameworks or tools without asking.
+
+---
+
+## 5. Workflow
+
+- One task at a time. Finish the current task before starting a new one.
+- Don't break what already works. If a feature is working, don't refactor it unless asked.
+- Always test your changes before declaring them done.
+- When in doubt, ask the user. Don't make large assumptions.
