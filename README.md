@@ -23,6 +23,31 @@ Before you begin, follow these rules throughout the entire setup:
 
 ---
 
+## Phase 0 — Welcome
+
+Before doing anything else, greet the student warmly. Say:
+
+"👋 Hey! Welcome to IQ Setup — I'm Claude, your AI coding assistant.
+
+Here's what we're going to do together today:
+
+1. **Check your computer** — figure out what you're working with
+2. **Install developer tools** — Git, Node.js, Supabase, GitHub CLI, Vercel, and more
+3. **Install custom commands** — shortcuts that let you build, save, and deploy with one word
+4. **Set up your accounts** — GitHub, Supabase, and Vercel (we'll do it step by step)
+5. **Connect everything to Claude** — so I can manage your database and browser directly
+6. **Connect your existing project** (if you have one on Bolt or Lovable)
+
+The whole thing takes about 15–20 minutes. I'll guide you through every step and explain everything as we go.
+
+⚠️ **One important thing before we start:** Please read everything I write carefully. At certain points I'll ask you to open your Terminal, type a command, or click something in your browser — if you miss those instructions, the setup will get stuck. I'll always be clear about what you need to do, but you have to follow along with me.
+
+**Ready to start?** Just say 'yes' or 'let's go' and we'll begin! 🚀"
+
+Wait for the student to confirm before continuing to Phase 1.
+
+---
+
 ## Phase 1 — System Check
 
 Detect the student's operating system:
@@ -394,9 +419,59 @@ PYEOF
 On Windows, if `python3` is not found, try `python` instead.
 If neither works, install Python: `winget install Python.Python.3 --accept-package-agreements --accept-source-agreements`
 
-Tell the student: "I've configured the Playwright browser testing tool. This lets me browse the web and test your app automatically."
+### 6b — Set MCP Tool Permissions to Auto-Allow
 
-### 6b — Supabase MCP (needs token — configured later)
+So Claude never prompts the student for permission when using MCP tools, pre-approve all MCP tools in `~/.claude/settings.json`:
+
+```bash
+python3 << 'PYEOF'
+import json, os
+
+settings_dir = os.path.expanduser("~/.claude")
+settings_path = os.path.join(settings_dir, "settings.json")
+
+# Create ~/.claude/ directory if it doesn't exist
+os.makedirs(settings_dir, exist_ok=True)
+
+# Read existing settings or start fresh
+if os.path.exists(settings_path):
+    with open(settings_path, "r") as f:
+        settings = json.load(f)
+else:
+    settings = {}
+
+# Ensure permissions structure exists
+if "permissions" not in settings:
+    settings["permissions"] = {}
+if "allow" not in settings["permissions"]:
+    settings["permissions"]["allow"] = []
+
+# Add MCP permissions if not already present
+mcp_permissions = ["mcp__playwright__*", "mcp__supabase__*"]
+added = []
+for perm in mcp_permissions:
+    if perm not in settings["permissions"]["allow"]:
+        settings["permissions"]["allow"].append(perm)
+        added.append(perm)
+
+# Write back
+with open(settings_path, "w") as f:
+    json.dump(settings, f, indent=2)
+    f.write("\n")
+
+if added:
+    print(f"SUCCESS: MCP permissions added: {', '.join(added)}")
+else:
+    print("SKIP: MCP permissions already configured.")
+
+PYEOF
+```
+
+On Windows, use `python` instead of `python3` if needed.
+
+Tell the student: "I've configured the Playwright browser testing tool and set all permissions to auto-allow. This means I can use my tools without interrupting you to ask for approval."
+
+### 6c — Supabase MCP (needs token — configured later)
 
 Do NOT add the Supabase MCP server yet. We need the student's access token first. We'll come back to this in Phase 8 after account setup.
 
