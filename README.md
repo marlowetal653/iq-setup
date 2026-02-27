@@ -40,7 +40,7 @@ Here's what we're going to do together today:
 
 The whole thing takes about 15–20 minutes. I'll guide you through every step and explain everything as we go.
 
-⚠️ **One important thing before we start:** Please read everything I write carefully. At certain points I'll ask you to open your Terminal, type a command, or click something in your browser — if you miss those instructions, the setup will get stuck. I'll always be clear about what you need to do, but you have to follow along with me.
+⚠️ **One important thing before we start:** This is a conversation — I'll be talking to you the whole time. I'll ask you questions, tell you things to do, and wait for you to respond before I move on. Please read every message I send carefully. At certain steps I'll ask you to open your Terminal and type a command, click something in your browser, or copy and paste something back to me. You have to actually do those things and tell me when you're done — otherwise I'll be waiting and nothing will happen. Don't worry, I'll explain everything clearly. Just go at your own pace.
 
 **Ready to start?** Just say 'yes' or 'let's go' and we'll begin! 🚀"
 
