@@ -31,7 +31,8 @@ Read https://raw.githubusercontent.com/marlowetal653/iq-setup/main/README.md and
 - **Node.js + npm** — JavaScript runtime
 - **Supabase CLI** — Database management
 - **GitHub CLI** — Code hosting integration
-- **Netlify CLI** — App deployment
+- **Claude Code CLI** — Launch Claude from any terminal
+- **Vercel CLI** — App deployment
 
 ### MCP Servers (Claude superpowers)
 - **Playwright** — Browser automation and testing
@@ -40,17 +41,29 @@ Read https://raw.githubusercontent.com/marlowetal653/iq-setup/main/README.md and
 ### Custom Commands
 | Command | What it does |
 |---------|-------------|
+| `/master` | Plan your app spec step by step |
+| `/feature-dev` | Guided workflow for building a new feature |
+| `/frontend-design` | Improve the look and feel of your app |
 | `/preview` | Start the app and open it in the browser |
-| `/test` | Run a full test suite (linting, unit tests, E2E) |
-| `/master` | Build an app specification step by step (in French) |
+| `/commit` | Take a quick local snapshot (no push) |
 | `/save` | Git add + commit + push in one command |
+| `/buildandpush` | Build, commit, and push in one go |
 | `/sync` | Pull latest changes + update dependencies |
-| `/deploy` | Deploy to Netlify |
+| `/deploy` | Deploy to Vercel |
+| `/test` | Run a full test suite (linting, unit tests, E2E) |
+| `/install-bmad` | Install the BMAD AI agent framework |
 
 ### Accounts Created
 - **GitHub** — Where code lives
 - **Supabase** — Where the database lives
-- **Netlify** — Where the app goes live
+- **Vercel** — Where the app goes live
+
+### Existing Projects (Bolt / Lovable)
+If the student already has an app on Bolt.new or Lovable, the setup walks them through:
+- Exporting the project to GitHub
+- Cloning it to their computer
+- Setting up the .env file
+- Running a preview
 
 ## How to modify
 

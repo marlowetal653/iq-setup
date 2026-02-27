@@ -11,14 +11,15 @@
 
 Before you begin, follow these rules throughout the entire setup:
 
-1. **Talk to the student.** After every major step, tell them what you just did and what's coming next. Use plain, simple language. They are completely non-technical.
+1. **Talk constantly.** Before each step, tell the student what you're about to do and why. After each step, tell them what you just did and what's coming next. Never go silent for more than one action.
 2. **Be idempotent.** Before installing anything, check if it's already installed. If it is, skip it and say so.
-3. **Ask before acting.** Before running install commands, briefly tell the student what you're about to install and why. Wait for their OK.
+3. **Narrate installs.** Before every install command, explain what the tool does in one plain sentence. Example: "I'm about to install Git — this tracks every change you make to your code, like version history in Google Docs."
 4. **Handle errors gracefully.** If something fails, explain what went wrong in plain language and suggest a fix.
 5. **One step at a time.** Do not rush. Complete each phase fully before moving to the next.
 6. **Supports macOS and Windows.** Detect the OS in Phase 1 and follow the correct instructions for each platform throughout.
-7. **Be encouraging.** These are beginners. Celebrate small wins. Never make them feel dumb.
-8. **Never run interactive commands.** Some commands need the student to type, select options, or enter passwords. You CANNOT do this for them — Claude Code's terminal doesn't support interactive input. For these commands, tell the student to open their own terminal app and type the command themselves. On Mac: **Terminal** (Cmd+Space, type "Terminal", press Enter). On Windows: **PowerShell** (press Windows key, type "PowerShell", press Enter). Walk them through every prompt they'll see. Wait for them to tell you they're done before continuing.
+7. **Be encouraging.** These are beginners. Celebrate small wins. Never make them feel dumb. Use phrases like "Great!" and "You're doing amazing — this is the hard part, it gets easier from here."
+8. **🔴 Never run interactive commands.** Some commands need the student to type, select options, or enter passwords. You CANNOT do this for them — Claude Code's terminal doesn't support interactive input. For these commands, tell the student to open their own terminal app and type the command themselves. On Mac: **Terminal** (Cmd+Space, type "Terminal", press Enter). On Windows: **PowerShell** (press Windows key, type "PowerShell", press Enter). Walk them through every prompt they'll see. Wait for them to tell you they're done before continuing.
+9. **🔴 Use red circle emoji for critical warnings.** When telling the student something they MUST NOT miss — passwords, one-time tokens, restart requirements, interactive commands — start that message with 🔴. This makes it visually impossible to miss.
 
 ---
 
@@ -54,9 +55,8 @@ which brew
 
 1. Tell the student: "I need to install Homebrew. It's like an app store for developer tools — it's the standard way to install things on a Mac. It's safe and used by millions of developers."
 
-2. IMPORTANT — This is an INTERACTIVE install. You cannot run it yourself.
-   Tell the student to open their **Terminal** app:
-   "I need you to open the Terminal app on your Mac. Press Cmd+Space, type 'Terminal', and press Enter."
+2. 🔴 INTERACTIVE INSTALL — You cannot run this yourself. Tell the student to open their **Terminal** app:
+   "🔴 I need you to open the Terminal app on your Mac. Press Cmd+Space, type 'Terminal', and press Enter. Let me know when you can see a black or white window with a command prompt."
 
 3. Once they confirm Terminal is open, give them the command to paste:
    "Copy and paste this command into Terminal, then press Enter:"
@@ -65,19 +65,19 @@ which brew
    ```
 
 4. Warn them about the password prompt:
-   "Your Mac will ask for your password. This is your computer login password. When you type it, you won't see any dots or stars — that's completely normal. Just type it and press Enter."
+   "🔴 Your Mac will ask for your password. This is your normal computer login password. When you type it, you won't see any dots or stars — that's completely normal and intentional. Just type it and press Enter."
 
 5. Tell them to let you know when they see "Installation successful!" or similar.
    Wait for them to confirm before continuing.
 
-6. CRITICAL — After install, Homebrew needs to be added to PATH.
-   Tell the student to also paste this into their Terminal:
+6. 🔴 CRITICAL PATH SETUP — After install, Homebrew needs to be added to your Mac's PATH or it won't work.
+   Tell the student: "🔴 One more thing before we continue — I need you to paste one more command into Terminal."
    On Apple Silicon Macs (arm64):
    ```
    echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> ~/.zprofile
    eval "$(/opt/homebrew/bin/brew shellenv)"
    ```
-   On Intel Macs (x86_64): No action needed — tell them to skip this step.
+   On Intel Macs (x86_64): No action needed — tell them: "You're on an Intel Mac, so you can skip this step."
 
 7. If the install triggered a popup asking to install "Xcode Command Line Tools":
    Tell the student: "A popup appeared asking to install developer tools. Click 'Install' and wait — it can take 5-10 minutes. Let me know when it's done."
@@ -104,14 +104,15 @@ If it fails: Tell the student "winget should be pre-installed on Windows 11. Let
 
 ## Phase 3 — Install Developer Tools
 
-For each tool below, check if it's already installed before installing. After each install, explain what the tool does in one simple sentence.
+Tell the student: "Now I'm going to install the developer tools you need. I'll explain what each one does as I go. This part is automatic — you just watch."
+
+For each tool below, check if it's already installed before installing.
 
 ### 3a — Git
 
-Check:
-```bash
-git --version
-```
+Tell the student: "First up: Git. Think of it like version history for your code — every time you save, Git takes a snapshot you can go back to. It's what powers the /save command you'll use every day."
+
+Check: `git --version`
 
 **On Mac** — if not installed: `brew install git`
 **On Windows** — if not installed:
@@ -119,14 +120,13 @@ git --version
 winget install Git.Git --accept-package-agreements --accept-source-agreements
 ```
 
-Tell them: "Git is how we track changes to your code — like version history in Google Docs."
+After install: "Git is ready!"
 
 ### 3b — Node.js
 
-Check:
-```bash
-node --version
-```
+Tell the student: "Next: Node.js. This is the engine that actually runs your web app's code. Without it, your app can't run on your computer."
+
+Check: `node --version`
 
 **On Mac** — if not installed: `brew install node`
 **On Windows** — if not installed:
@@ -134,15 +134,14 @@ node --version
 winget install OpenJS.NodeJS.LTS --accept-package-agreements --accept-source-agreements
 ```
 
-After install, also verify npm: `npm --version`
-Tell them: "Node.js runs JavaScript, which is the language your web app will use."
+After install, verify npm: `npm --version`
+Tell them: "Node.js and npm are ready! npm is Node's built-in app store — it downloads code packages your app needs."
 
 ### 3c — Supabase CLI
 
-Check:
-```bash
-supabase --version
-```
+Tell the student: "Now: Supabase CLI. Supabase is your database — it stores everything your app needs to remember, like users, content, and settings. This CLI lets me manage it for you from the command line."
+
+Check: `supabase --version`
 
 **On Mac** — if not installed: `brew install supabase/tap/supabase`
 **On Windows** — if not installed:
@@ -150,14 +149,13 @@ supabase --version
 npm install -g supabase
 ```
 
-Tell them: "Supabase is your database — it stores all the data for your app, like user accounts and content."
+After install: "Supabase CLI is ready!"
 
 ### 3d — GitHub CLI
 
-Check:
-```bash
-gh --version
-```
+Tell the student: "Next: GitHub CLI. GitHub is like Google Drive for code — it's where your code lives online so it's never lost. This CLI lets me connect to it and push your code up automatically."
+
+Check: `gh --version`
 
 **On Mac** — if not installed: `brew install gh`
 **On Windows** — if not installed:
@@ -165,46 +163,44 @@ gh --version
 winget install GitHub.cli --accept-package-agreements --accept-source-agreements
 ```
 
-Tell them: "GitHub CLI lets me connect your code to GitHub, which is like Google Drive for code."
+After install: "GitHub CLI is ready!"
 
 ### 3e — Claude Code CLI
 
-Check:
-```bash
-claude --version
-```
+Tell the student: "Now installing the Claude Code CLI. This lets you launch me from any terminal window — not just the desktop app."
+
+Check: `claude --version`
 
 If not installed (on both Mac and Windows):
 ```bash
 npm install -g @anthropic-ai/claude-code
 ```
 
-Tell them: "Claude Code CLI lets you launch me directly from any terminal — not just the desktop app."
+After install: "Claude Code CLI is ready!"
 
-### 3f — Netlify CLI
+### 3f — Vercel CLI
 
-Check:
-```bash
-netlify --version
-```
+Tell the student: "Last tool: Vercel CLI. Vercel is how we put your app live on the internet — it takes your code and deploys it to a public URL that anyone can visit."
+
+Check: `vercel --version`
 
 If not installed (on both Mac and Windows):
 ```bash
-npm install -g netlify-cli
+npm install -g vercel
 ```
 
-Tell them: "Netlify is how we put your app live on the internet — it takes your code and makes it available to anyone with a link."
+After install: "Vercel CLI is ready!"
 
 After all tools are installed, tell the student:
-"All developer tools are installed. Here's what we set up:
-- Git (track code changes)
-- Node.js (run your app)
-- Supabase CLI (manage your database)
-- GitHub CLI (connect to GitHub)
-- Claude Code CLI (launch Claude from any terminal)
-- Netlify CLI (deploy your app to the internet)
+"All developer tools are installed — great work getting through this part! Here's the toolkit you now have:
+- ✅ Git — tracks every change to your code
+- ✅ Node.js — runs your web app
+- ✅ Supabase CLI — manages your database
+- ✅ GitHub CLI — connects your code to GitHub
+- ✅ Claude Code CLI — launches me from any terminal
+- ✅ Vercel CLI — deploys your app to the internet
 
-Now let's install some custom commands that will make your life easier."
+Now let's install some custom commands that will make your life much easier."
 
 ---
 
@@ -237,6 +233,11 @@ cp /tmp/iq-setup/skills/master.md ~/.claude/commands/master.md
 cp /tmp/iq-setup/skills/save.md ~/.claude/commands/save.md
 cp /tmp/iq-setup/skills/sync.md ~/.claude/commands/sync.md
 cp /tmp/iq-setup/skills/deploy.md ~/.claude/commands/deploy.md
+cp /tmp/iq-setup/skills/commit.md ~/.claude/commands/commit.md
+cp /tmp/iq-setup/skills/buildandpush.md ~/.claude/commands/buildandpush.md
+cp /tmp/iq-setup/skills/install-bmad.md ~/.claude/commands/install-bmad.md
+cp /tmp/iq-setup/skills/feature-dev.md ~/.claude/commands/feature-dev.md
+cp /tmp/iq-setup/skills/frontend-design.md ~/.claude/commands/frontend-design.md
 ```
 
 On Windows, use `copy` if `cp` doesn't work:
@@ -277,16 +278,28 @@ rmdir /s /q %TEMP%\iq-setup
 ### 4e — Tell the student what they got
 
 Tell them:
-"I've installed 6 custom commands you can use anytime:
+"I've installed 11 custom commands you can use anytime:
 
-- **/preview** — Start your app and open it in your browser
-- **/test** — Run a full test suite to check everything works
-- **/master** — Build your app specification step by step (this is the main one!)
+**Build & Save:**
+- **/commit** — Take a quick local snapshot (no push)
 - **/save** — Save your work and back it up to GitHub
-- **/sync** — Get the latest version of your code
-- **/deploy** — Put your app live on the internet
+- **/buildandpush** — Build, then save and push in one go
 
-I also installed some rules that make me work better — like automatically saving your work when you approve something."
+**Run & Deploy:**
+- **/preview** — Start your app and open it in your browser
+- **/deploy** — Put your app live on the internet (Vercel)
+
+**Plan & Build:**
+- **/master** — Build your app specification step by step (start here!)
+- **/feature-dev** — Guided workflow for building a new feature
+- **/frontend-design** — Improve the look and feel of your app
+
+**Maintain:**
+- **/test** — Run a full test suite to check everything works
+- **/sync** — Get the latest version of your code
+- **/install-bmad** — Install the BMAD AI agent framework (advanced)
+
+I also installed some rules that make me smarter and more consistent."
 
 ---
 
@@ -417,9 +430,9 @@ Ask the student: "Do you already have a GitHub account?"
 
 ### Step 7b — Connect GitHub to Claude Code
 
-IMPORTANT: `gh auth login` is an INTERACTIVE command. Do NOT run it yourself — it will hang.
+🔴 INTERACTIVE COMMAND — Do NOT run `gh auth login` yourself — it will hang waiting for input you can't provide.
 
-Tell the student: "Now let's connect your GitHub account to Claude Code. This requires you to type a command yourself."
+Tell the student: "🔴 Now let's connect your GitHub account to Claude Code. This step requires you to type a command yourself in your Terminal."
 
 1. Tell them to open their terminal app (if not already open):
    **On Mac:** "Open Terminal (Cmd+Space, type 'Terminal', Enter)."
@@ -489,51 +502,51 @@ Tell the student: "We need to create an access token — this is a special key t
 2. "Click **Generate new token**"
 3. "For the name, type **Claude Code**"
 4. "Click **Generate token**"
-5. "IMPORTANT: You'll see a long string of text that starts with 'sbp_'. Click the copy button next to it."
-6. "This is the ONLY time you can see this token. If you lose it, you'll have to create a new one."
-7. "Now paste the token here in our chat."
+5. "🔴 You'll see a long string of text that starts with 'sbp_'. Click the copy button next to it RIGHT NOW."
+6. "🔴 This is the ONLY time Supabase will show you this token. If you close the page without copying it, you'll have to create a new one."
+7. "Paste the token here in our chat."
 
 Wait for them to paste the token. It should start with `sbp_`.
 
 If what they pasted doesn't start with `sbp_`:
 - Tell them: "That doesn't look right — the token should start with 'sbp_'. Can you try copying it again from the Supabase page?"
 
-### Step 7f — Create Netlify Account and Log In
+### Step 7f — Create Vercel Account and Log In
 
-Tell the student: "Now let's set up Netlify — this is the service that will put your app live on the internet. We'll use your GitHub account to sign up, so no new password needed."
+Tell the student: "Now let's set up Vercel — this is the service that will put your app live on the internet. We'll use your GitHub account to sign up, so no new password needed."
 
-1. Tell them to open **https://app.netlify.com/signup** in their browser
-2. "Click **GitHub** to sign up with your GitHub account"
-3. "On the GitHub page, click **Authorize netlify**"
-4. "You should now be on the Netlify dashboard!"
+1. Tell them to open **https://vercel.com/signup** in their browser
+2. "Click **Continue with GitHub**"
+3. "On the GitHub page, click **Authorize Vercel**"
+4. "You might be asked about your team — select **Continue with Hobby (free)**"
+5. "You should now be on the Vercel dashboard!"
 
-Now log in to the Netlify CLI. This is an INTERACTIVE command — the student needs to run it themselves.
+Now log in to the Vercel CLI. 🔴 This is an INTERACTIVE command — the student needs to run it themselves.
 
-5. Tell them to go back to their terminal app (the same one they used for `gh auth login`):
+6. Tell them to go back to their terminal app (the same one they used for `gh auth login`):
    **On Mac:** "Go back to Terminal (or open it again: Cmd+Space, type 'Terminal', Enter)."
    **On Windows:** "Go back to PowerShell (or open it again: Windows key, type 'PowerShell', Enter)."
 
-6. Give them the command to paste:
+7. Give them the command to paste:
    "Copy and paste this into your terminal and press Enter:"
    ```
-   netlify login
+   vercel login
    ```
 
-7. Walk them through what happens:
-   - "Your browser will open automatically to a Netlify authorization page"
-   - "Click **Authorize**"
-   - "You'll see a message saying 'You're now logged in' — you can close that browser tab"
-   - "Go back to your terminal — you should see 'You are now logged in'"
+8. Walk them through what happens:
+   - "It will ask how you want to log in — use the arrow keys to select **Continue with GitHub** and press Enter"
+   - "Your browser will open — click **Authorize Vercel**"
+   - "Go back to your terminal — you should see 'Congratulations! You are now logged in'"
 
-8. Tell them: "Once you see that confirmation, come back here and tell me."
+9. Tell them: "🔴 Once you see the confirmation message, come back here and tell me."
 
-9. When they confirm, verify it yourself (this command IS non-interactive):
+10. When they confirm, verify it yourself (this command IS non-interactive):
 ```bash
-netlify status
+vercel whoami
 ```
 
-If `netlify status` shows they're logged in: "Netlify is connected! When you're ready to put your app online, just type /deploy."
-If not: Walk them through `netlify login` again.
+If `vercel whoami` shows their username: "Vercel is connected! When you're ready to put your app online, just type /deploy."
+If not: Walk them through `vercel login` again.
 
 ---
 
@@ -580,10 +593,10 @@ PYEOF
 
 On Windows, use `python` instead of `python3` if needed.
 
-IMPORTANT: After adding the MCP server, Claude needs to restart to pick up the new configuration.
+🔴 IMPORTANT: After adding the MCP server, Claude needs to restart to pick up the new configuration.
 
 Tell the student:
-"I've connected your Supabase account to Claude Code! For this to take effect, you need to restart Claude Code:
+"🔴 I've connected your Supabase account to Claude Code! For this to take effect, you need to restart Claude Code:
 
 1. Close this Claude Code window completely
    **On Mac:** Cmd+Q or type 'exit'
@@ -608,7 +621,7 @@ echo "Node.js: $(node --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "npm: $(npm --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "Supabase CLI: $(supabase --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "GitHub CLI: $(gh --version 2>/dev/null | head -1 || echo 'NOT INSTALLED')"
-echo "Netlify CLI: $(netlify --version 2>/dev/null || echo 'NOT INSTALLED')"
+echo "Vercel CLI: $(vercel --version 2>/dev/null || echo 'NOT INSTALLED')"
 ```
 
 On macOS, also check:
@@ -651,36 +664,129 @@ Tell the student the results in plain language. For each item:
 
 ---
 
-## Phase 10 — Wrap-Up
+## Phase 10 — Connect Your Existing Project (Bolt / Lovable)
+
+Ask the student: "Almost done with setup! Quick question — do you already have an app you've been building on **Bolt.new** or **Lovable**?"
+
+**If NO (or they're starting fresh):**
+Tell them: "No worries! When you're ready to start building, restart Claude Code and type **/master** — I'll guide you through planning your whole app. Let's finish setup."
+Then skip to Phase 11.
+
+**If YES:** Follow the steps below.
+
+---
+
+Ask: "Which tool are you using — **Bolt** (bolt.new) or **Lovable** (lovable.dev)?"
+
+### Step 10a — Export to GitHub
+
+**If Bolt:**
+1. Tell them to go to their Bolt project in the browser
+2. "Look for the GitHub icon in the top right corner of the editor — it looks like a little cat"
+3. "Click it. If it asks you to connect GitHub, authorize it."
+4. "Then click **Push to GitHub** — it will create a new repository on your GitHub account with all your code"
+5. "Once it finishes, look for the repository link — it should look like `https://github.com/yourusername/project-name`"
+6. "Paste that link here."
+
+**If Lovable:**
+1. Tell them to go to their Lovable project in the browser
+2. "Look for a GitHub button — usually in the top bar or in Settings"
+3. "Click **Connect to GitHub** or **Export to GitHub**"
+4. "Authorize Lovable to access your GitHub if asked"
+5. "It will create a new repository with your code"
+6. "Once done, copy the GitHub repository URL and paste it here."
+
+Wait for them to paste the GitHub URL.
+
+### Step 10b — Clone the Project
+
+Tell the student: "I have the URL — let me get your project onto your computer now."
+
+1. Determine where to save it. Ask: "Where would you like to save your project? I suggest your Desktop for easy access." Wait for their answer.
+2. Clone the repo to their chosen location:
+   **On Mac:**
+   ```bash
+   git clone <their-github-url> ~/Desktop/<project-name>
+   ```
+   Replace `<project-name>` with the actual repo name from their URL.
+   **On Windows:**
+   ```bash
+   git clone <their-github-url> %USERPROFILE%\Desktop\<project-name>
+   ```
+3. Tell them: "Your project is now on your computer! Let me get it running."
+
+### Step 10c — Get the .env File
+
+Tell the student: "Your app needs a secret settings file called `.env` — it contains the keys that connect your app to your database and other services. We need to copy it from Bolt or Lovable."
+
+🔴 Explain: "🔴 The .env file contains sensitive keys. Never share it publicly or put it on GitHub — it's like a password for your app."
+
+**If Bolt:**
+1. "Go back to your Bolt project"
+2. "Look for a lock icon or click on **Settings** → **Environment Variables**"
+3. "You'll see a list of variables like `VITE_SUPABASE_URL=...`. Click **Copy all** or select all the text"
+4. "Paste everything here in the chat"
+
+**If Lovable:**
+1. "Go back to your Lovable project"
+2. "Click on **Settings** (gear icon) → **Environment Variables**"
+3. "You may also find Supabase keys under the Supabase integration panel"
+4. "Copy all the environment variables and paste them here"
+
+Wait for them to paste the .env content. Then:
+- Create the file: Write the pasted content to `<project-dir>/.env`
+- Tell them: "I've saved your .env file. Your app can now connect to your database."
+
+### Step 10d — Install Dependencies and Preview
+
+Tell the student: "One last thing — I need to install your app's packages. This is like installing all the ingredients before cooking."
+
+```bash
+cd <project-dir> && npm install
+```
+
+If `npm install` has errors, fix them before continuing.
+
+Once done, tell the student: "Everything is installed! Type **/preview** to start your app and see it running on your computer."
+
+---
+
+## Phase 11 — Wrap-Up
 
 Tell the student:
 
-"Setup is complete! Here's everything we installed and configured:
+"Setup is complete — you crushed it! Here's everything we installed and configured:
 
 **Developer Tools:**
-- Git (tracks changes to your code)
+- Git (tracks every change to your code)
 - Node.js + npm (runs your web app)
 - Supabase CLI (manages your database)
 - GitHub CLI (connects to GitHub)
-- Netlify CLI (deploys your app to the internet)
+- Claude Code CLI (launches me from any terminal)
+- Vercel CLI (deploys your app to the internet)
 
 **Claude Superpowers:**
 - Playwright (I can browse the web and test your app)
 - Supabase MCP (I can manage your database directly)
 
 **Custom Commands (type these anytime):**
-- /preview — Start your app and open it in your browser
-- /test — Run a full test to check everything works
-- /master — Build your app specification step by step
-- /save — Save your work and back it up online
-- /sync — Get the latest version of your code
-- /deploy — Put your app live on the internet
+- **/master** — Plan your app step by step (start here!)
+- **/feature-dev** — Build a new feature with guidance
+- **/frontend-design** — Improve the look and feel
+- **/preview** — Start your app and open it in your browser
+- **/commit** — Take a quick local snapshot
+- **/save** — Save your work and back it up to GitHub
+- **/buildandpush** — Build, commit, and push in one go
+- **/sync** — Get the latest version of your code
+- **/deploy** — Put your app live on the internet
+- **/test** — Run a full test to check everything works
+- **/install-bmad** — Install the BMAD AI agent framework
 
 **Accounts:**
 - GitHub (your code lives here)
 - Supabase (your database lives here)
-- Netlify (your app goes live here)
+- Vercel (your app goes live here)
 
-Remember to restart Claude Code to activate the Supabase connection!
+🔴 Remember to restart Claude Code to activate the Supabase connection!
 
-You're ready to start building! After restarting, open a new conversation and type **/master** to start defining your app."
+After restarting, open a new conversation and type **/master** to start building your app — or if you already have one on Bolt or Lovable, let me know and I'll help you connect it."
