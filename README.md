@@ -739,7 +739,7 @@ Tell the student the results in plain language. For each item:
 
 ---
 
-## Phase 10 — Connect Your Existing Project
+## Phase 10 — GitHub Desktop & Connect Your Project
 
 Ask the student: "Almost done with setup! Quick question — do you already have an app you've been building somewhere?"
 
@@ -747,90 +747,105 @@ Ask the student: "Almost done with setup! Quick question — do you already have
 Tell them: "No worries! When you're ready to start building, restart Claude Code and type **/master** — I'll guide you through planning your whole app. Let's finish setup."
 Then skip to Phase 11.
 
-**If YES:** Ask: "Where is your project right now? Pick the one that fits:
-
-1. **Bolt** (bolt.new)
-2. **Lovable** (lovable.dev)
-3. **Already on GitHub** — I have a GitHub repo URL"
+**If YES:** Continue below.
 
 ---
 
-**If option 3 — Already on GitHub:** Skip to Step 10b directly. Ask them to paste their GitHub repo URL now.
+### Step 10a — Download GitHub Desktop
 
-Ask: "Which tool are you using — **Bolt** (bolt.new) or **Lovable** (lovable.dev)?"
+Tell the student:
+"Next we're going to download an app called **GitHub Desktop**. It's basically a simple app that lets you see your project files, save your work, and back it up online — all with buttons instead of typing commands. Think of it like iCloud or Google Drive, but built specifically for code.
 
-### Step 10a — Export to GitHub
+Have you already downloaded the GitHub Desktop app?"
 
-**If Bolt:**
-1. Tell them to go to their Bolt project in the browser
-2. "Look for the GitHub icon in the top right corner of the editor — it looks like a little cat"
-3. "Click it. If it asks you to connect GitHub, authorize it."
-4. "Then click **Push to GitHub** — it will create a new repository on your GitHub account with all your code"
-5. "Once it finishes, look for the repository link — it should look like `https://github.com/yourusername/project-name`"
-6. "Paste that link here."
+- **If YES, already installed and signed in** → skip to Step 10c
+- **If YES, downloaded but not set up** → skip to Step 10b
+- **If NO** → Tell them: "Go to **https://desktop.github.com/download/** and download the app. Install it like any other app — come back here once it's open."
 
-**If Lovable:**
-1. Tell them to go to their Lovable project in the browser
-2. "Look for a GitHub button — usually in the top bar or in Settings"
-3. "Click **Connect to GitHub** or **Export to GitHub**"
-4. "Authorize Lovable to access your GitHub if asked"
-5. "It will create a new repository with your code"
-6. "Once done, copy the GitHub repository URL and paste it here."
+Wait for them to confirm it's open before continuing.
 
-Wait for them to paste the GitHub URL.
+### Step 10b — Sign In to GitHub Desktop
 
-### Step 10b — Clone the Project
+Tell the student:
+"When GitHub Desktop opens for the first time, it will walk you through a short setup. Just follow the onboarding steps — when it asks you to sign in to GitHub, do that with the GitHub account we set up earlier. Come back here once you're signed in and can see the main screen."
 
-Tell the student: "I have the URL — let me get your project onto your computer now."
+Wait for them to confirm they're signed in before continuing.
 
-1. Determine where to save it. Ask: "Where would you like to save your project? I suggest your Desktop for easy access." Wait for their answer.
-2. Clone the repo to their chosen location:
-   **On Mac:**
-   ```bash
-   git clone <their-github-url> ~/Desktop/<project-name>
-   ```
-   Replace `<project-name>` with the actual repo name from their URL.
-   **On Windows:**
-   ```bash
-   git clone <their-github-url> %USERPROFILE%\Desktop\<project-name>
-   ```
-3. Tell them: "Your project is now on your computer! Let me get it running."
+### Step 10c — Confirm Project is on GitHub
 
-### Step 10c — Get the .env File
+Ask: "Where did you build your project?
+1. **Bolt** (bolt.new)
+2. **Lovable** (lovable.dev)
+3. **It's already on GitHub**"
 
-Tell the student: "Your app needs a secret settings file called `.env` — it contains the keys that connect your app to your database and other services."
+**If Bolt or Lovable:**
+Tell them: "Let's make sure your project is properly synced to GitHub before we clone it.
+- Go to your project in Bolt or Lovable
+- Look for the **GitHub icon** (the little cat logo) — it's usually in the top bar
+- Click it
+- If it shows a **green icon** or says **'Synced'** — you're all set, let me know!
+- If it's NOT connected yet:
+  1. Click **Connect to GitHub**
+  2. It will ask you to **name your repository** — just use your project name (keep it simple, no spaces)
+  3. It might walk you through a couple of steps
+  4. At some point you'll see a pop-up that says **'Confirm two-way sync'** — the confirmation button is **red** and looks a bit scary, but that's totally normal. **Click the red button** to confirm.
+  5. Once it's connected and shows a green icon, let me know!"
 
-🔴 Explain: "🔴 The .env file contains sensitive keys. Never share it publicly or put it on GitHub — it's like a password for your app."
+**If Already on GitHub:** "Perfect, we're good to go."
 
-**If Bolt:**
-1. "Go back to your Bolt project"
-2. "Look for a lock icon or click on **Settings** → **Environment Variables**"
-3. "You'll see a list of variables like `VITE_SUPABASE_URL=...`. Click **Copy all** or select all the text"
-4. "Paste everything here in the chat"
+Wait for them to confirm their project is synced before continuing.
 
-**If Lovable:**
-1. "Go back to your Lovable project"
-2. "Click on **Settings** (gear icon) → **Environment Variables**"
-3. "You may also find Supabase keys under the Supabase integration panel"
-4. "Copy all the environment variables and paste them here"
+### Step 10d — Clone via GitHub Desktop
+
+Tell the student: "Now let's get your project onto your computer using GitHub Desktop."
+
+1. "In GitHub Desktop, click **File** in the top menu bar"
+   - **Mac:** It's at the very top of the screen, in the menu bar
+   - **Windows:** It's in the top-left corner of the app window
+2. "Click **Clone Repository**"
+3. "A window opens. Click the **GitHub.com** tab at the top — you'll see a list of all your GitHub repos"
+4. "Find your project in the list and click on it to select it"
+5. "Now look at the **Local Path** field at the bottom — click **Choose...**"
+6. "Navigate to your **coding** folder:"
+   - **Mac:** In the sidebar, click your username (your home folder), then open the **coding** folder
+   - **Windows:** Navigate to `C:\Users\YourName\` and open the **coding** folder
+7. "Click **Select Folder** (Windows) or **Open** (Mac)"
+8. "Click the blue **Clone** button"
+9. "GitHub Desktop will download your project. When it's done, you'll see your project name in the **top-left dropdown** of the app."
+
+Tell them: "Your project is now on your computer inside your coding folder!"
+
+### Step 10e — Get the .env File
+
+Tell the student: "Your app needs a secret settings file called `.env` — it holds the keys that connect your app to your database. Think of it like a password file. We never put this on GitHub — it stays private on your computer."
+
+🔴 Explain: "🔴 The .env file contains sensitive keys. Never share it publicly or put it on GitHub."
+
+**If Bolt or Lovable:**
+1. "Go back to your project in Bolt or Lovable"
+2. "At the top of the screen, click the **Code** tab (it's right next to the Preview tab)"
+3. "In the file list on the left, look for a file called **`.env`**"
+4. "Click on it — the contents will appear on the right"
+5. "Select all the text and copy it"
+6. "Paste it here in the chat"
 
 **If Already on GitHub:**
 Check whether a `.env.example` file exists in the repo:
 ```bash
 ls <project-dir>/.env.example 2>/dev/null && echo "FOUND" || echo "NOT FOUND"
 ```
-- If found: Tell them "I can see your repo has a `.env.example` file — it lists all the variables your app needs but without the actual values. I'll use it as a template. You'll need to fill in the real values for each one — these come from your Supabase project dashboard. Let me walk you through it."
+- If found: Tell them "Your repo has a `.env.example` file — I'll use it as a template. Let's fill in your real Supabase values together. Go to your Supabase project → **Settings → API** and paste your Project URL and anon key here."
   - Copy `.env.example` to `.env`, then go through each variable with the student to fill in the real values from their Supabase project.
-- If not found: Tell them "Your app likely needs a `.env` file with your Supabase keys. Do you have your Supabase project URL and anon key handy? You can find them in your Supabase project under **Settings → API**. Paste them here and I'll create the file."
+- If not found: Tell them "Your app likely needs a `.env` file with your Supabase keys. Do you have your Supabase project URL and anon key? You'll find them at **supabase.com/dashboard → your project → Settings → API**. Paste them here."
   - Once they provide the values, create `.env` with the correct contents.
 
-Wait for them to paste the .env content (Bolt/Lovable) or confirm the values (GitHub). Then:
+Wait for them to paste the .env content (Bolt/Lovable) or provide the values (GitHub). Then:
 - Create the file: Write the content to `<project-dir>/.env`
-- Tell them: "I've saved your .env file. Your app can now connect to your database."
+- Tell them: "I've saved your .env file. Your app can now talk to your database."
 
-### Step 10d — Install Dependencies and Preview
+### Step 10f — Install Dependencies and Preview
 
-Tell the student: "One last thing — I need to install your app's packages. This is like installing all the ingredients before cooking."
+Tell the student: "One last thing — I need to install your app's packages. This is like downloading all the ingredients before cooking."
 
 ```bash
 cd <project-dir> && npm install
@@ -839,6 +854,30 @@ cd <project-dir> && npm install
 If `npm install` has errors, fix them before continuing.
 
 Once done, tell the student: "Everything is installed! Type **/preview** to start your app and see it running on your computer."
+
+### Step 10g — How to Save Your Work (GitHub Desktop Tutorial)
+
+Tell the student:
+
+"Before we finish — let me explain the one thing you'll do in GitHub Desktop every day: **saving your work**.
+
+**Saving your work = Commit + Push**
+
+A **commit** is like a save point — a snapshot of your project at that moment. A **push** backs it up to GitHub online so you never lose it.
+
+**How to do it in GitHub Desktop:**
+1. Open GitHub Desktop — you'll see your changed files on the **left sidebar** under the **Changes** tab
+2. Click the **checkbox** next to each file (or click the top checkbox to select all)
+3. In the **Summary** box at the bottom-left, type a short note about what changed (e.g. 'Fixed login button')
+4. Click the blue **Commit to main** button
+5. Then look at the **top-right button** — it will now say **Push**. Click it.
+6. Done! Your code is saved and backed up.
+
+**How often should you commit?**
+**As often as possible!** Every time you make a small change that works — fixing a tiny bug, adjusting some text, adding a button — commit it. Think of it like pressing Ctrl+S. The more commits you have, the easier it is to undo mistakes.
+
+**The easy way: just tell me to commit.**
+Instead of opening GitHub Desktop every time, you can just say **'commit my changes'** or type **/save** right here in Claude Code. I'll create a nice commit message for you and push it to GitHub automatically. That's usually the fastest way to do it."
 
 ---
 
