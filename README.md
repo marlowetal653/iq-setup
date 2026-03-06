@@ -739,17 +739,23 @@ Tell the student the results in plain language. For each item:
 
 ---
 
-## Phase 10 — Connect Your Existing Project (Bolt / Lovable)
+## Phase 10 — Connect Your Existing Project
 
-Ask the student: "Almost done with setup! Quick question — do you already have an app you've been building on **Bolt.new** or **Lovable**?"
+Ask the student: "Almost done with setup! Quick question — do you already have an app you've been building somewhere?"
 
 **If NO (or they're starting fresh):**
 Tell them: "No worries! When you're ready to start building, restart Claude Code and type **/master** — I'll guide you through planning your whole app. Let's finish setup."
 Then skip to Phase 11.
 
-**If YES:** Follow the steps below.
+**If YES:** Ask: "Where is your project right now? Pick the one that fits:
+
+1. **Bolt** (bolt.new)
+2. **Lovable** (lovable.dev)
+3. **Already on GitHub** — I have a GitHub repo URL"
 
 ---
+
+**If option 3 — Already on GitHub:** Skip to Step 10b directly. Ask them to paste their GitHub repo URL now.
 
 Ask: "Which tool are you using — **Bolt** (bolt.new) or **Lovable** (lovable.dev)?"
 
@@ -792,7 +798,7 @@ Tell the student: "I have the URL — let me get your project onto your computer
 
 ### Step 10c — Get the .env File
 
-Tell the student: "Your app needs a secret settings file called `.env` — it contains the keys that connect your app to your database and other services. We need to copy it from Bolt or Lovable."
+Tell the student: "Your app needs a secret settings file called `.env` — it contains the keys that connect your app to your database and other services."
 
 🔴 Explain: "🔴 The .env file contains sensitive keys. Never share it publicly or put it on GitHub — it's like a password for your app."
 
@@ -808,8 +814,18 @@ Tell the student: "Your app needs a secret settings file called `.env` — it co
 3. "You may also find Supabase keys under the Supabase integration panel"
 4. "Copy all the environment variables and paste them here"
 
-Wait for them to paste the .env content. Then:
-- Create the file: Write the pasted content to `<project-dir>/.env`
+**If Already on GitHub:**
+Check whether a `.env.example` file exists in the repo:
+```bash
+ls <project-dir>/.env.example 2>/dev/null && echo "FOUND" || echo "NOT FOUND"
+```
+- If found: Tell them "I can see your repo has a `.env.example` file — it lists all the variables your app needs but without the actual values. I'll use it as a template. You'll need to fill in the real values for each one — these come from your Supabase project dashboard. Let me walk you through it."
+  - Copy `.env.example` to `.env`, then go through each variable with the student to fill in the real values from their Supabase project.
+- If not found: Tell them "Your app likely needs a `.env` file with your Supabase keys. Do you have your Supabase project URL and anon key handy? You can find them in your Supabase project under **Settings → API**. Paste them here and I'll create the file."
+  - Once they provide the values, create `.env` with the correct contents.
+
+Wait for them to paste the .env content (Bolt/Lovable) or confirm the values (GitHub). Then:
+- Create the file: Write the content to `<project-dir>/.env`
 - Tell them: "I've saved your .env file. Your app can now connect to your database."
 
 ### Step 10d — Install Dependencies and Preview
