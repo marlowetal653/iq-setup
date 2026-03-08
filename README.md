@@ -32,9 +32,9 @@ Before doing anything else, greet the student warmly. Say:
 Here's what we're going to do together today:
 
 1. **Check your computer** — figure out what you're working with
-2. **Install developer tools** — Git, Node.js, Supabase, GitHub CLI, Vercel, and more
+2. **Install developer tools** — Git, Node.js, Supabase, GitHub CLI, and more
 3. **Install custom commands** — shortcuts that let you build, save, and deploy with one word
-4. **Set up your accounts** — GitHub, Supabase, and Vercel (we'll do it step by step)
+4. **Set up your accounts** — GitHub and Supabase (we'll do it step by step)
 5. **Connect everything to Claude** — so I can manage your database and browser directly
 6. **Connect your existing project** (if you have one on Bolt or Lovable)
 
@@ -203,19 +203,6 @@ npm install -g @anthropic-ai/claude-code
 
 After install: "Claude Code CLI is ready!"
 
-### 3f — Vercel CLI
-
-Tell the student: "Last tool: Vercel CLI. Vercel is how we put your app live on the internet — it takes your code and deploys it to a public URL that anyone can visit."
-
-Check: `vercel --version`
-
-If not installed (on both Mac and Windows):
-```bash
-npm install -g vercel
-```
-
-After install: "Vercel CLI is ready!"
-
 After all tools are installed, tell the student:
 "All developer tools are installed — great work getting through this part! Here's the toolkit you now have:
 - ✅ Git — tracks every change to your code
@@ -223,7 +210,6 @@ After all tools are installed, tell the student:
 - ✅ Supabase CLI — manages your database
 - ✅ GitHub CLI — connects your code to GitHub
 - ✅ Claude Code CLI — launches me from any terminal
-- ✅ Vercel CLI — deploys your app to the internet
 
 Now let's install some custom commands that will make your life much easier."
 
@@ -303,7 +289,7 @@ rmdir /s /q %TEMP%\iq-setup
 ### 4e — Tell the student what they got
 
 Tell them:
-"I've installed 11 custom commands you can use anytime:
+"I've installed 12 custom commands you can use anytime:
 
 **Build & Save:**
 - **/commit** — Take a quick local snapshot (no push)
@@ -313,6 +299,7 @@ Tell them:
 **Run & Deploy:**
 - **/preview** — Start your app and open it in your browser
 - **/deploy** — Put your app live on the internet (Vercel)
+- **/install-vercel** — Install Vercel CLI and set up your account (run this before /deploy)
 
 **Plan & Build:**
 - **/master** — Build your app specification step by step (start here!)
@@ -586,43 +573,6 @@ Wait for them to paste the token. It should start with `sbp_`.
 If what they pasted doesn't start with `sbp_`:
 - Tell them: "That doesn't look right — the token should start with 'sbp_'. Can you try copying it again from the Supabase page?"
 
-### Step 7f — Create Vercel Account and Log In
-
-Tell the student: "Now let's set up Vercel — this is the service that will put your app live on the internet. We'll use your GitHub account to sign up, so no new password needed."
-
-1. Tell them to open **https://vercel.com/signup** in their browser
-2. "Click **Continue with GitHub**"
-3. "On the GitHub page, click **Authorize Vercel**"
-4. "You might be asked about your team — select **Continue with Hobby (free)**"
-5. "You should now be on the Vercel dashboard!"
-
-Now log in to the Vercel CLI. 🔴 This is an INTERACTIVE command — the student needs to run it themselves.
-
-6. Tell them to go back to their terminal app (the same one they used for `gh auth login`):
-   **On Mac:** "Go back to Terminal (or open it again: Cmd+Space, type 'Terminal', Enter)."
-   **On Windows:** "Go back to PowerShell (or open it again: Windows key, type 'PowerShell', Enter)."
-
-7. Give them the command to paste:
-   "Copy and paste this into your terminal and press Enter:"
-   ```
-   vercel login
-   ```
-
-8. Walk them through what happens:
-   - "It will ask how you want to log in — use the arrow keys to select **Continue with GitHub** and press Enter"
-   - "Your browser will open — click **Authorize Vercel**"
-   - "Go back to your terminal — you should see 'Congratulations! You are now logged in'"
-
-9. Tell them: "🔴 Once you see the confirmation message, come back here and tell me."
-
-10. When they confirm, verify it yourself (this command IS non-interactive):
-```bash
-vercel whoami
-```
-
-If `vercel whoami` shows their username: "Vercel is connected! When you're ready to put your app online, just type /deploy."
-If not: Walk them through `vercel login` again.
-
 ---
 
 ## Phase 8 — Connect Supabase to Claude
@@ -696,7 +646,6 @@ echo "Node.js: $(node --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "npm: $(npm --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "Supabase CLI: $(supabase --version 2>/dev/null || echo 'NOT INSTALLED')"
 echo "GitHub CLI: $(gh --version 2>/dev/null | head -1 || echo 'NOT INSTALLED')"
-echo "Vercel CLI: $(vercel --version 2>/dev/null || echo 'NOT INSTALLED')"
 ```
 
 On macOS, also check:
@@ -893,7 +842,6 @@ Tell the student:
 - Supabase CLI (manages your database)
 - GitHub CLI (connects to GitHub)
 - Claude Code CLI (launches me from any terminal)
-- Vercel CLI (deploys your app to the internet)
 
 **Claude Superpowers:**
 - Playwright (I can browse the web and test your app)
@@ -910,12 +858,12 @@ Tell the student:
 - **/sync** — Get the latest version of your code
 - **/deploy** — Put your app live on the internet
 - **/test** — Run a full test to check everything works
+- **/install-vercel** — Install Vercel CLI and set up your account (run before first deploy)
 - **/install-bmad** — Install the BMAD AI agent framework
 
 **Accounts:**
 - GitHub (your code lives here)
 - Supabase (your database lives here)
-- Vercel (your app goes live here)
 
 🔴 Remember to restart Claude Code to activate the Supabase connection!
 

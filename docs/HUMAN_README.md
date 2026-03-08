@@ -32,7 +32,6 @@ Read https://raw.githubusercontent.com/marlowetal653/iq-setup/main/README.md and
 - **Supabase CLI** — Database management
 - **GitHub CLI** — Code hosting integration
 - **Claude Code CLI** — Launch Claude from any terminal
-- **Vercel CLI** — App deployment
 
 ### MCP Servers (Claude superpowers)
 - **Playwright** — Browser automation and testing
@@ -51,12 +50,13 @@ Read https://raw.githubusercontent.com/marlowetal653/iq-setup/main/README.md and
 | `/sync` | Pull latest changes + update dependencies |
 | `/deploy` | Deploy to Vercel |
 | `/test` | Run a full test suite (linting, unit tests, E2E) |
+| `/install-vercel` | Install Vercel CLI and set up account |
 | `/install-bmad` | Install the BMAD AI agent framework |
 
 ### Accounts Created
 - **GitHub** — Where code lives
 - **Supabase** — Where the database lives
-- **Vercel** — Where the app goes live
+- **Vercel** — Where the app goes live (installed later via `/install-vercel`)
 
 ### Existing Projects (Bolt / Lovable)
 If the student already has an app on Bolt.new or Lovable, the setup walks them through:
