@@ -40,23 +40,23 @@ Read https://raw.githubusercontent.com/marlowetal653/iq-setup/main/README.md and
 ### Custom Commands
 | Command | What it does |
 |---------|-------------|
-| `/master` | Plan your app spec step by step |
-| `/feature-dev` | Guided workflow for building a new feature |
-| `/frontend-design` | Improve the look and feel of your app |
-| `/preview` | Start the app and open it in the browser |
-| `/commit` | Take a quick local snapshot (no push) |
-| `/save` | Git add + commit + push in one command |
-| `/buildandpush` | Build, commit, and push in one go |
-| `/sync` | Pull latest changes + update dependencies |
-| `/deploy` | Deploy to Vercel |
-| `/test` | Run a full test suite (linting, unit tests, E2E) |
-| `/install-vercel` | Install Vercel CLI and set up account |
-| `/install-bmad` | Install the BMAD AI agent framework |
+| `/iq-master` | Plan your app spec step by step |
+| `/iq-feature-dev` | Guided workflow for building a new feature |
+| `/iq-frontend-design` | Improve the look and feel of your app |
+| `/iq-preview` | Start the app and open it in the browser |
+| `/iq-commit` | Take a quick local snapshot (no push) |
+| `/iq-save` | Git add + commit + push in one command |
+| `/iq-buildandpush` | Build, commit, and push in one go |
+| `/iq-sync` | Pull latest changes + update dependencies |
+| `/iq-deploy-to-vercel` | Deploy to Vercel |
+| `/iq-test` | Run a full test suite (linting, unit tests, E2E) |
+
+| `/iq-install-bmad` | Install the BMAD AI agent framework |
 
 ### Accounts Created
 - **GitHub** — Where code lives
 - **Supabase** — Where the database lives
-- **Vercel** — Where the app goes live (installed later via `/install-vercel`)
+- **Vercel** — Where the app goes live (set up automatically when you first run `/iq-deploy-to-vercel`)
 
 ### Existing Projects (Bolt / Lovable)
 If the student already has an app on Bolt.new or Lovable, the setup walks them through:

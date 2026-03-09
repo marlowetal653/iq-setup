@@ -15,4 +15,4 @@ Steps:
 6. Write a short, plain-language commit message (no "Co-Authored-By" tags)
 7. Commit: `git commit -m "your message"`
 8. Push to GitHub: `git push` (use `git push -u origin main` if this is the first push)
-9. Tell the student: "Your app built successfully and is backed up to GitHub. Run /deploy when you're ready to put it live on the internet."
+9. Tell the student: "Your app built successfully and is backed up to GitHub. Run /iq-deploy-to-vercel when you're ready to put it live on the internet."

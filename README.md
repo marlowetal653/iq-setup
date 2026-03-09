@@ -135,7 +135,7 @@ For each tool below, check if it's already installed before installing.
 
 ### 3a — Git
 
-Tell the student: "First up: Git. Think of it like version history for your code — every time you save, Git takes a snapshot you can go back to. It's what powers the /save command you'll use every day."
+Tell the student: "First up: Git. Think of it like version history for your code — every time you save, Git takes a snapshot you can go back to. It's what powers the /iq-save command you'll use every day."
 
 Check: `git --version`
 
@@ -235,29 +235,33 @@ Create the commands directory if it doesn't exist:
 mkdir -p ~/.claude/commands
 ```
 
-Copy each skill file. For each one, check if it already exists first. If it does, ask the student: "You already have a [name] command. Should I update it with the latest version?"
+Copy all skill files from the `skills/` folder. For each one, check if it already exists first. If it does, ask the student: "You already have a [name] command. Should I update it with the latest version?"
 
 ```bash
-cp /tmp/iq-setup/skills/preview.md ~/.claude/commands/preview.md
-cp /tmp/iq-setup/skills/test.md ~/.claude/commands/test.md
-cp /tmp/iq-setup/skills/master.md ~/.claude/commands/master.md
-cp /tmp/iq-setup/skills/save.md ~/.claude/commands/save.md
-cp /tmp/iq-setup/skills/sync.md ~/.claude/commands/sync.md
-cp /tmp/iq-setup/skills/deploy.md ~/.claude/commands/deploy.md
-cp /tmp/iq-setup/skills/commit.md ~/.claude/commands/commit.md
-cp /tmp/iq-setup/skills/buildandpush.md ~/.claude/commands/buildandpush.md
-cp /tmp/iq-setup/skills/install-bmad.md ~/.claude/commands/install-bmad.md
-cp /tmp/iq-setup/skills/feature-dev.md ~/.claude/commands/feature-dev.md
-cp /tmp/iq-setup/skills/frontend-design.md ~/.claude/commands/frontend-design.md
+cp /tmp/iq-setup/skills/*.md ~/.claude/commands/
 ```
 
 On Windows, use `copy` if `cp` doesn't work:
 ```bash
-copy %TEMP%\iq-setup\skills\preview.md %USERPROFILE%\.claude\commands\preview.md
+copy %TEMP%\iq-setup\skills\*.md %USERPROFILE%\.claude\commands\
 ```
-(Repeat for each file)
 
-### 4c — Install global Claude rules
+### 4c — Install Vercel deploy skill
+
+Install the Vercel deploy skill so `/iq-deploy-to-vercel` can use it:
+
+```bash
+mkdir -p ~/.claude/skills/deploy-to-vercel
+cp -r /tmp/iq-setup/skills/deploy-to-vercel/* ~/.claude/skills/deploy-to-vercel/
+```
+
+On Windows:
+```bash
+mkdir %USERPROFILE%\.claude\skills\deploy-to-vercel 2>nul
+xcopy %TEMP%\iq-setup\skills\deploy-to-vercel\* %USERPROFILE%\.claude\skills\deploy-to-vercel\ /E /Y
+```
+
+### 4e — Install global Claude rules
 
 Check if `~/.claude/CLAUDE.md` already exists.
 
@@ -274,7 +278,7 @@ echo "" >> ~/.claude/CLAUDE.md
 cat /tmp/iq-setup/config/CLAUDE.md >> ~/.claude/CLAUDE.md
 ```
 
-### 4d — Clean up
+### 4f — Clean up
 
 **On Mac:**
 ```bash
@@ -286,30 +290,28 @@ rm -rf /tmp/iq-setup
 rmdir /s /q %TEMP%\iq-setup
 ```
 
-### 4e — Tell the student what they got
+### 4g — Tell the student what they got
 
 Tell them:
 "I've installed 12 custom commands you can use anytime:
 
 **Build & Save:**
-- **/commit** — Take a quick local snapshot (no push)
-- **/save** — Save your work and back it up to GitHub
-- **/buildandpush** — Build, then save and push in one go
+- **/iq-commit** — Take a quick local snapshot (no push)
+- **/iq-save** — Save your work and back it up to GitHub
+- **/iq-buildandpush** — Build, then save and push in one go
 
 **Run & Deploy:**
-- **/preview** — Start your app and open it in your browser
-- **/deploy** — Put your app live on the internet (Vercel)
-- **/install-vercel** — Install Vercel CLI and set up your account (run this before /deploy)
-
+- **/iq-preview** — Start your app and open it in your browser
+- **/iq-deploy-to-vercel** — Put your app live on the internet (Vercel)
 **Plan & Build:**
-- **/master** — Build your app specification step by step (start here!)
-- **/feature-dev** — Guided workflow for building a new feature
-- **/frontend-design** — Improve the look and feel of your app
+- **/iq-master** — Build your app specification step by step (start here!)
+- **/iq-feature-dev** — Guided workflow for building a new feature
+- **/iq-frontend-design** — Improve the look and feel of your app
 
 **Maintain:**
-- **/test** — Run a full test suite to check everything works
-- **/sync** — Get the latest version of your code
-- **/install-bmad** — Install the BMAD AI agent framework (advanced)
+- **/iq-test** — Run a full test suite to check everything works
+- **/iq-sync** — Get the latest version of your code
+- **/iq-install-bmad** — Install the BMAD AI agent framework (advanced)
 
 I also installed some rules that make me smarter and more consistent."
 
@@ -693,7 +695,7 @@ Tell the student the results in plain language. For each item:
 Ask the student: "Almost done with setup! Quick question — do you already have an app you've been building somewhere?"
 
 **If NO (or they're starting fresh):**
-Tell them: "No worries! When you're ready to start building, restart Claude Code and type **/master** — I'll guide you through planning your whole app. Let's finish setup."
+Tell them: "No worries! When you're ready to start building, restart Claude Code and type **/iq-master** — I'll guide you through planning your whole app. Let's finish setup."
 Then skip to Phase 11.
 
 **If YES:** Continue below.
@@ -802,7 +804,7 @@ cd <project-dir> && npm install
 
 If `npm install` has errors, fix them before continuing.
 
-Once done, tell the student: "Everything is installed! Type **/preview** to start your app and see it running on your computer."
+Once done, tell the student: "Everything is installed! Type **/iq-preview** to start your app and see it running on your computer."
 
 ### Step 10g — How to Save Your Work (GitHub Desktop Tutorial)
 
@@ -826,7 +828,7 @@ A **commit** is like a save point — a snapshot of your project at that moment.
 **As often as possible!** Every time you make a small change that works — fixing a tiny bug, adjusting some text, adding a button — commit it. Think of it like pressing Ctrl+S. The more commits you have, the easier it is to undo mistakes.
 
 **The easy way: just tell me to commit.**
-Instead of opening GitHub Desktop every time, you can just say **'commit my changes'** or type **/save** right here in Claude Code. I'll create a nice commit message for you and push it to GitHub automatically. That's usually the fastest way to do it."
+Instead of opening GitHub Desktop every time, you can just say **'commit my changes'** or type **/iq-save** right here in Claude Code. I'll create a nice commit message for you and push it to GitHub automatically. That's usually the fastest way to do it."
 
 ---
 
@@ -848,18 +850,18 @@ Tell the student:
 - Supabase MCP (I can manage your database directly)
 
 **Custom Commands (type these anytime):**
-- **/master** — Plan your app step by step (start here!)
-- **/feature-dev** — Build a new feature with guidance
-- **/frontend-design** — Improve the look and feel
-- **/preview** — Start your app and open it in your browser
-- **/commit** — Take a quick local snapshot
-- **/save** — Save your work and back it up to GitHub
-- **/buildandpush** — Build, commit, and push in one go
-- **/sync** — Get the latest version of your code
-- **/deploy** — Put your app live on the internet
-- **/test** — Run a full test to check everything works
-- **/install-vercel** — Install Vercel CLI and set up your account (run before first deploy)
-- **/install-bmad** — Install the BMAD AI agent framework
+- **/iq-master** — Plan your app step by step (start here!)
+- **/iq-feature-dev** — Build a new feature with guidance
+- **/iq-frontend-design** — Improve the look and feel
+- **/iq-preview** — Start your app and open it in your browser
+- **/iq-commit** — Take a quick local snapshot
+- **/iq-save** — Save your work and back it up to GitHub
+- **/iq-buildandpush** — Build, commit, and push in one go
+- **/iq-sync** — Get the latest version of your code
+- **/iq-deploy-to-vercel** — Put your app live on the internet
+- **/iq-test** — Run a full test to check everything works
+
+- **/iq-install-bmad** — Install the BMAD AI agent framework
 
 **Accounts:**
 - GitHub (your code lives here)
@@ -867,4 +869,4 @@ Tell the student:
 
 🔴 Remember to restart Claude Code to activate the Supabase connection!
 
-After restarting, open a new conversation and type **/master** to start building your app — or if you already have one on Bolt or Lovable, let me know and I'll help you connect it."
+After restarting, open a new conversation and type **/iq-master** to start building your app — or if you already have one on Bolt or Lovable, let me know and I'll help you connect it."

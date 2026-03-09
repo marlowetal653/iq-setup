@@ -22,9 +22,9 @@ Steps:
 
 6. Build it step by step:
    - Complete each step fully before moving to the next
-   - After each major step, run /preview to visually verify
+   - After each major step, run /iq-preview to visually verify
    - If something breaks, fix it before continuing
 
-7. Once the feature is built, run /test to verify everything works
+7. Once the feature is built, run /iq-test to verify everything works
 
-8. Run /save to commit the completed feature with a clear commit message describing what was added
+8. Run /iq-save to commit the completed feature with a clear commit message describing what was added

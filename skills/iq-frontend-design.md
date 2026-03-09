@@ -1,7 +1,7 @@
 Guide for designing and improving the visual appearance of your app.
 
 Steps:
-1. Run /preview to see the current state of the app
+1. Run /iq-preview to see the current state of the app
 
 2. Ask the student:
    - "What would you like to improve visually? (e.g. the whole look and feel, a specific page, the colors, the layout)"
@@ -22,8 +22,8 @@ Steps:
    - Then: layout and spacing
    - Then: individual components (buttons, cards, forms, navigation)
 
-6. After each layer of changes, run /preview and ask: "Here's how it looks. Does this feel right? What would you like to tweak?"
+6. After each layer of changes, run /iq-preview and ask: "Here's how it looks. Does this feel right? What would you like to tweak?"
 
 7. Iterate until the student is happy
 
-8. Run /save to commit the final design with a clear commit message
+8. Run /iq-save to commit the final design with a clear commit message
