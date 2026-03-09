@@ -26,4 +26,4 @@ Steps:
 
 7. Iterate until the student is happy
 
-8. Run /iq-save to commit the final design with a clear commit message
+8. Run /iq-push to commit the final design with a clear commit message

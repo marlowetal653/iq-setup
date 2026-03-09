@@ -44,9 +44,8 @@ Read https://raw.githubusercontent.com/marlowetal653/iq-setup/main/README.md and
 | `/iq-feature-dev` | Guided workflow for building a new feature |
 | `/iq-frontend-design` | Improve the look and feel of your app |
 | `/iq-preview` | Start the app and open it in the browser |
-| `/iq-commit` | Take a quick local snapshot (no push) |
-| `/iq-save` | Git add + commit + push in one command |
-| `/iq-buildandpush` | Build, commit, and push in one go |
+
+| `/iq-commit-and-push` | Build, commit, and push to GitHub |
 | `/iq-sync` | Pull latest changes + update dependencies |
 | `/iq-deploy-to-vercel` | Deploy to Vercel |
 | `/iq-test` | Run a full test suite (linting, unit tests, E2E) |

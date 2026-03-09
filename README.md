@@ -135,7 +135,7 @@ For each tool below, check if it's already installed before installing.
 
 ### 3a — Git
 
-Tell the student: "First up: Git. Think of it like version history for your code — every time you save, Git takes a snapshot you can go back to. It's what powers the /iq-save command you'll use every day."
+Tell the student: "First up: Git. Think of it like version history for your code — every time you save, Git takes a snapshot you can go back to. It's what powers the /iq-commit-and-push command you'll use every day."
 
 Check: `git --version`
 
@@ -296,9 +296,7 @@ Tell them:
 "I've installed 12 custom commands you can use anytime:
 
 **Build & Save:**
-- **/iq-commit** — Take a quick local snapshot (no push)
-- **/iq-save** — Save your work and back it up to GitHub
-- **/iq-buildandpush** — Build, then save and push in one go
+- **/iq-commit-and-push** — Build, commit, and push to GitHub
 
 **Run & Deploy:**
 - **/iq-preview** — Start your app and open it in your browser
@@ -828,7 +826,7 @@ A **commit** is like a save point — a snapshot of your project at that moment.
 **As often as possible!** Every time you make a small change that works — fixing a tiny bug, adjusting some text, adding a button — commit it. Think of it like pressing Ctrl+S. The more commits you have, the easier it is to undo mistakes.
 
 **The easy way: just tell me to commit.**
-Instead of opening GitHub Desktop every time, you can just say **'commit my changes'** or type **/iq-save** right here in Claude Code. I'll create a nice commit message for you and push it to GitHub automatically. That's usually the fastest way to do it."
+Instead of opening GitHub Desktop every time, you can just say **'commit my changes'** or type **/iq-commit-and-push** right here in Claude Code. I'll create a nice commit message for you and push it to GitHub automatically. That's usually the fastest way to do it."
 
 ---
 
@@ -854,9 +852,7 @@ Tell the student:
 - **/iq-feature-dev** — Build a new feature with guidance
 - **/iq-frontend-design** — Improve the look and feel
 - **/iq-preview** — Start your app and open it in your browser
-- **/iq-commit** — Take a quick local snapshot
-- **/iq-save** — Save your work and back it up to GitHub
-- **/iq-buildandpush** — Build, commit, and push in one go
+- **/iq-commit-and-push** — Build, commit, and push to GitHub
 - **/iq-sync** — Get the latest version of your code
 - **/iq-deploy-to-vercel** — Put your app live on the internet
 - **/iq-test** — Run a full test to check everything works

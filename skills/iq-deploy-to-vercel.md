@@ -1,7 +1,7 @@
 Deploy the app to the internet using Vercel so anyone can access it.
 
 Steps:
-1. First, make sure all work is saved (run /iq-save if there are uncommitted changes)
+1. First, make sure all work is saved (run /iq-commit-and-push if there are uncommitted changes)
 
 2. Read the Vercel deploy skill at `~/.claude/skills/deploy-to-vercel/SKILL.md` and follow its deployment flow.
 

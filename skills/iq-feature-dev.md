@@ -27,4 +27,4 @@ Steps:
 
 7. Once the feature is built, run /iq-test to verify everything works
 
-8. Run /iq-save to commit the completed feature with a clear commit message describing what was added
+8. Run /iq-push to commit the completed feature with a clear commit message describing what was added
