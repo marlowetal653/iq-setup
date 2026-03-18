@@ -1,41 +1,83 @@
-Deploy the app to the internet using Vercel so anyone can access it.
+Deploy the app to the internet so anyone can access it.
 
 Steps:
-1. First, make sure all work is saved (run /iq-commit-and-push if there are uncommitted changes)
 
-2. Read the Vercel deploy skill at `~/.claude/skills/deploy-to-vercel/SKILL.md` and follow its deployment flow.
+1. First, make sure all work is saved (run /save if there are uncommitted changes).
 
-3. **If the Vercel CLI is not installed or the student is not authenticated** (i.e. the SKILL.md flow reaches the "Not linked + CLI not authenticated" path), use this beginner-friendly walkthrough instead of just running `vercel login`:
+2. Check if Vercel CLI is installed and the student is logged in:
+   ```bash
+   vercel whoami
+   ```
+   - If this fails, tell the student: "You need to set up Vercel first. Type /install-vercel and we'll get that done." Then stop here.
 
-   a. Install the CLI:
+3. Check if the project is already linked to Vercel:
+   - Look for a `.vercel/` directory in the project.
+   - If not linked, run `vercel link` and walk the student through the prompts (create new project, confirm settings).
+
+4. Deploy to production:
+   ```bash
+   vercel --prod
+   ```
+
+5. Wait for the deployment to complete. Capture the live URL from the output.
+
+6. Give the student their live URL and open it:
+   - **Mac:** `open <URL>`
+   - **Windows:** `start <URL>`
+   - Tell the student: "Your app is now live on the internet! Anyone with this link can use it."
+
+7. Check the URL type. If the URL is a free Vercel subdomain (ends in `.vercel.app`), tell the student:
+
+   "Right now your app is on a free Vercel URL — something like `your-app.vercel.app`. This works great and is totally fine to use! But if you want a custom domain like `yourname.com` or `myapp.io`, we can set that up too."
+
+   Ask: "Would you like to get your own custom domain, or is the free URL good for now?"
+
+   - If the student says the free URL is fine, say: "You're all set! You can always add a custom domain later by typing /deploy and asking about it." Then stop here.
+   - If the student wants a custom domain, continue to step 8.
+
+   If the URL is already on a custom domain (not `.vercel.app`), tell the student: "Your app is live on your custom domain!" Then stop here.
+
+8. Ask the student:
+
+   "Do you want to **purchase a new domain**, or do you **already own a domain** you'd like to connect?"
+
+9. If the student wants to **purchase a new domain**:
+
+   Walk them through buying directly on Vercel:
+   "1. Go to your Vercel dashboard at **https://vercel.com** in your browser."
+   "2. Click **Add New...** in the top right, then click **Domain**."
+   "3. Search for the domain name you want (like `yourname.com`)."
+   "4. If it's available, click **Buy** and follow the checkout."
+   "5. Vercel will automatically connect it to your project — that's it!"
+
+   After they confirm the purchase, verify:
+   ```bash
+   vercel domains ls
+   ```
+   Tell the student: "Your custom domain is connected! Your app should be live at `yourdomain.com` in a few minutes."
+
+10. If the student **already owns a domain**:
+
+    - Ask: "What's your domain?" (e.g., `mycoolapp.com`)
+    - Add it to the Vercel project:
       ```bash
-      npm install -g vercel
+      vercel domains add <domain>
       ```
-      Tell the student: "Installing Vercel — this is what puts your app live on the internet."
+    - Vercel will output the DNS records needed. Tell the student:
 
-   b. Walk the student through creating a Vercel account:
-      - Tell them to open **https://vercel.com/signup** in their browser
-      - "Click **Continue with GitHub**"
-      - "On the GitHub page, click **Authorize Vercel**"
-      - "You might be asked about your team — select **Continue with Hobby (free)**"
-      - "You should now be on the Vercel dashboard!"
+      "Now we need to point your domain to Vercel. Here's what to do:"
+      "1. Log in to the site where you bought the domain (Namecheap, Cloudflare, GoDaddy, etc.) and find the DNS settings."
+      "2. Add these records:"
 
-   c. Log in to the CLI. 🔴 This is an INTERACTIVE command — the student needs to run it themselves.
-      - **On Mac:** "Open Terminal (Cmd+Space, type 'Terminal', Enter)."
-      - **On Windows:** "Open PowerShell (press Windows key, type 'PowerShell', Enter)."
-      - "Copy and paste this into your terminal and press Enter:"
-        ```
-        vercel login
-        ```
-      - "It will ask how you want to log in — select **Continue with GitHub** and press Enter"
-      - "Your browser will open — click **Authorize Vercel**"
-      - "Go back to your terminal — you should see 'Congratulations! You are now logged in'"
-      - "🔴 Once you see the confirmation message, come back here and tell me."
+      Show the records from the `vercel domains add` output. Typically:
+      - "Add an **A record**: Name = `@`, Value = `76.76.21.21`"
+      - "Add a **CNAME record**: Name = `www`, Value = `cname.vercel-dns.com`"
 
-   d. When they confirm, verify: `vercel whoami`
+      "3. Save the changes. DNS can take a few minutes to update (sometimes up to an hour, but usually much faster)."
 
-   e. Then continue with the SKILL.md linking and deploy steps.
-
-4. After deployment, give the student their live URL
-5. Open the live URL in the browser: `open <URL>` (Mac) or `start <URL>` (Windows)
-6. Tell the student: "Your app is now live on the internet! Anyone with this link can use it."
+    - After the student confirms they've updated DNS, verify:
+      ```bash
+      vercel domains verify <domain>
+      ```
+    - If verified: "Your custom domain is connected! Your app is now live at `yourdomain.com`."
+    - If not yet verified: "DNS is still propagating — this is normal. Try visiting your domain in a few minutes. If it's still not working after an hour, come back and we'll troubleshoot."
