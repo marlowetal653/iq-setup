@@ -21,7 +21,7 @@ Steps:
    ```bash
    vercel whoami
    ```
-   - If this shows a username, tell the student: "You're already logged into Vercel as [username]. You're all set! When you're ready to put your app online, just type /deploy." Then stop here.
+   - If this shows a username, tell the student: "You're already logged into Vercel as [username]. You're all set! When you're ready to put your app online, just type /iq-deploy-to-vercel." Then stop here.
    - If not logged in, continue to step 5.
 
 5. Log in to Vercel. This is an INTERACTIVE command — the student needs to run it themselves.
@@ -49,15 +49,15 @@ Steps:
    vercel whoami
    ```
 
-   - If it shows their username: "You're connected to Vercel! When you're ready to put your app online, just type /deploy."
+   - If it shows their username: "You're connected to Vercel! When you're ready to put your app online, just type /iq-deploy-to-vercel."
    - If it doesn't work: Walk them through `vercel login` again, checking for errors.
 
 7. 🔴 **Important note about environment variables.**
 
    Tell the student:
 
-   "One thing to know: when you run **/deploy**, I will automatically copy all your secret keys from your local `.env` file (the one with your Supabase keys, API keys, etc.) up to the Vercel project I create for you. Without this, your live app would break — it wouldn't be able to talk to your database. So this is a non-negotiable step in the deploy flow.
+   "One thing to know: when you run **/iq-deploy-to-vercel**, I will automatically copy all your secret keys from your local `.env` file (the one with your Supabase keys, API keys, etc.) up to the Vercel project I create for you. Without this, your live app would break — it wouldn't be able to talk to your database. So this is a non-negotiable step in the deploy flow.
 
    You don't need to do anything for this — just make sure your `.env` file in your project is up to date before you deploy."
 
-   This is a contract: the `/deploy` flow MUST sync `.env` to Vercel every time. If a future version of `/deploy` skips this, it's a bug.
+   This is a contract: the `/iq-deploy-to-vercel` flow MUST sync `.env` to Vercel every time. If a future version of `/iq-deploy-to-vercel` skips this, it's a bug.

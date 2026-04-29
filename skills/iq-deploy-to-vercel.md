@@ -40,24 +40,20 @@ Steps:
         Let me know when that's done."
       - If NO: continue.
 
-   d. Check whether the project uses TanStack Start (Lovable's current default ships with this framework configured for Cloudflare Workers):
+   d. 🔴 **AUTONOMOUSLY convert the project to Vercel-compatible if it uses TanStack Start.** Do not ask the student to make code changes. Make every edit yourself with the Edit/Write tool, run the build, and only surface a problem if the build actually fails after retrying.
+
+      First, detect TanStack Start (Lovable's current default ships with this framework configured for Cloudflare Workers):
       ```bash
       grep -E '"@tanstack/(react-)?start"' package.json 2>/dev/null
-      grep -E '"@tanstack/start' package.json 2>/dev/null
       ```
-      If found, the project will not deploy correctly to Vercel without changes. Walk the student through the migration:
+      If no match, skip the rest of step 2d and continue to step 3. If matched:
 
-      i. Tell the student: "Your project uses TanStack Start, which Lovable set up to deploy to Cloudflare. To deploy to Vercel instead, I need to swap a couple of config files. This won't change your app's features — it'll just change where it lives."
+      i. Tell the student: "Your project was set up by Lovable to deploy to Cloudflare. I'm converting it to Vercel — give me a minute. Your app's features won't change."
 
-      ii. Look for a TanStack Start config file:
-         ```bash
-         ls app.config.ts app.config.js vite.config.ts vite.config.js 2>/dev/null
-         ```
-
-      iii. If `app.config.ts` (or `.js`) exists, open it and find the preset/server target. Change it from any Cloudflare/Workers target to Vercel:
-         - If it has `server: { preset: 'cloudflare-workers' }` or `server: { preset: 'cloudflare-pages' }` → change preset to `'vercel'`.
-         - If it imports from `@tanstack/start/config` and has `defineConfig({ server: { preset: ... } })`, set `preset: 'vercel'`.
-         - If there's no server config at all, add one:
+      ii. **Edit the TanStack Start config to use the Vercel preset.** Check for `app.config.ts`, `app.config.js`, `vite.config.ts`, `vite.config.js` in the project root.
+         - If a config file exists and contains `preset:` set to any `cloudflare*` value (`'cloudflare-workers'`, `'cloudflare-pages'`, `'cloudflare'`, `'cloudflare-module'`) → use Edit to replace that string with `'vercel'`.
+         - If a config file exists with `defineConfig({ ... })` but no `server:` block → use Edit to add `server: { preset: 'vercel' },` inside the config object.
+         - If no `app.config.*` exists, use Write to create `app.config.ts`:
            ```ts
            import { defineConfig } from '@tanstack/start/config'
 
@@ -65,16 +61,29 @@ Steps:
              server: { preset: 'vercel' }
            })
            ```
+         Apply these edits directly. Do not paste config to the student or ask for permission.
 
-      iv. Open `package.json` and remove Cloudflare-specific dependencies if present: `wrangler`, `@cloudflare/workers-types`, `miniflare`. Run `npm install` after to refresh `package-lock.json`.
+      iii. **Remove Cloudflare dependencies from `package.json`.** Edit `package.json` directly to delete these entries from `dependencies` and `devDependencies` if present: `wrangler`, `@cloudflare/workers-types`, `@cloudflare/vite-plugin`, `miniflare`, `wrangler-action`. Then refresh the lockfile:
+         ```bash
+         npm install
+         ```
 
-      v. Look in `src/` (or `app/`) for any `import` of `@cloudflare/workers-types`, `cloudflare:workers`, or usage of Cloudflare-specific bindings (e.g. `env.MY_KV`, `env.DB` patterns coming from a Cloudflare worker handler). If found, tell the student which files have Cloudflare-specific code and ask if they want to convert each one — bindings need to be replaced with Vercel-equivalent calls (Vercel KV, Vercel Postgres, or just Supabase if the app already uses it). Don't blindly auto-edit business logic.
+      iv. **Rewrite Cloudflare-specific imports in source code.** Find them:
+         ```bash
+         grep -rln "cloudflare:workers\|@cloudflare/workers-types\|@cloudflare/vite-plugin" src app server 2>/dev/null
+         ```
+         For each matching file, use Edit autonomously:
+         - Delete any `import ... from 'cloudflare:workers'` and `import type ... from '@cloudflare/workers-types'` lines.
+         - Replace `env.X` (Workers binding access) with `process.env.X`. Vercel reads env vars via `process.env`.
+         - If a file uses KV/D1/R2 bindings AND the project already has Supabase (check `package.json` for `@supabase/supabase-js`), rewrite the binding call to use the existing Supabase client (table query for KV/D1, Storage for R2). If Supabase isn't present, comment out the binding usage with `// TODO: replace with Vercel storage` so the file still compiles.
 
-      vi. Test the build locally before deploying:
+      v. **Build to verify the migration:**
          ```bash
          npm run build
          ```
-         If the build fails, surface the error to the student and fix it before continuing. Common failures: missing Vercel adapter (`npm install @tanstack/start@latest`), or leftover `cloudflare:workers` imports.
+
+         - If the build succeeds → tell the student "Migration done — your project now builds for Vercel." Continue to step 3.
+         - If the build fails → read the error output, fix the file yourself, and re-run `npm run build`. Iterate up to 3 times. Common fixes: install the Vercel preset (`npm install @tanstack/start@latest`), remove a leftover `cloudflare:` import you missed, fix a `process.env` typo. Only ask the student for help if the same root cause recurs after 3 fix attempts.
 
 3. Check if Vercel CLI is installed and the student is logged in:
    ```bash
@@ -144,7 +153,7 @@ Steps:
 
    Ask: "Would you like to get your own custom domain, or is the free URL good for now?"
 
-   - If the student says the free URL is fine, say: "You're all set! You can always add a custom domain later by typing /deploy and asking about it." Then stop here.
+   - If the student says the free URL is fine, say: "You're all set! You can always add a custom domain later by typing /iq-deploy-to-vercel and asking about it." Then stop here.
    - If the student wants a custom domain, continue to step 10.
 
    If the URL is already on a custom domain (not `.vercel.app`), tell the student: "Your app is live on your custom domain!" Then stop here.
