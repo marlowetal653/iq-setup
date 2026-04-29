@@ -40,6 +40,42 @@ Steps:
         Let me know when that's done."
       - If NO: continue.
 
+   d. Check whether the project uses TanStack Start (Lovable's current default ships with this framework configured for Cloudflare Workers):
+      ```bash
+      grep -E '"@tanstack/(react-)?start"' package.json 2>/dev/null
+      grep -E '"@tanstack/start' package.json 2>/dev/null
+      ```
+      If found, the project will not deploy correctly to Vercel without changes. Walk the student through the migration:
+
+      i. Tell the student: "Your project uses TanStack Start, which Lovable set up to deploy to Cloudflare. To deploy to Vercel instead, I need to swap a couple of config files. This won't change your app's features — it'll just change where it lives."
+
+      ii. Look for a TanStack Start config file:
+         ```bash
+         ls app.config.ts app.config.js vite.config.ts vite.config.js 2>/dev/null
+         ```
+
+      iii. If `app.config.ts` (or `.js`) exists, open it and find the preset/server target. Change it from any Cloudflare/Workers target to Vercel:
+         - If it has `server: { preset: 'cloudflare-workers' }` or `server: { preset: 'cloudflare-pages' }` → change preset to `'vercel'`.
+         - If it imports from `@tanstack/start/config` and has `defineConfig({ server: { preset: ... } })`, set `preset: 'vercel'`.
+         - If there's no server config at all, add one:
+           ```ts
+           import { defineConfig } from '@tanstack/start/config'
+
+           export default defineConfig({
+             server: { preset: 'vercel' }
+           })
+           ```
+
+      iv. Open `package.json` and remove Cloudflare-specific dependencies if present: `wrangler`, `@cloudflare/workers-types`, `miniflare`. Run `npm install` after to refresh `package-lock.json`.
+
+      v. Look in `src/` (or `app/`) for any `import` of `@cloudflare/workers-types`, `cloudflare:workers`, or usage of Cloudflare-specific bindings (e.g. `env.MY_KV`, `env.DB` patterns coming from a Cloudflare worker handler). If found, tell the student which files have Cloudflare-specific code and ask if they want to convert each one — bindings need to be replaced with Vercel-equivalent calls (Vercel KV, Vercel Postgres, or just Supabase if the app already uses it). Don't blindly auto-edit business logic.
+
+      vi. Test the build locally before deploying:
+         ```bash
+         npm run build
+         ```
+         If the build fails, surface the error to the student and fix it before continuing. Common failures: missing Vercel adapter (`npm install @tanstack/start@latest`), or leftover `cloudflare:workers` imports.
+
 3. Check if Vercel CLI is installed and the student is logged in:
    ```bash
    vercel whoami

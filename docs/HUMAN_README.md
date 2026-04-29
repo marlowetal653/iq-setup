@@ -64,6 +64,22 @@ If the student already has an app on Bolt.new or Lovable, the setup walks them t
 - Setting up the .env file
 - Running a preview
 
+## If the `/iq-update-skills` command is broken or missing
+
+If a student is stuck on an old version where `/iq-update-skills` doesn't work (or asks them clarifying questions instead of running), they can repair their install in one line. They don't need Claude for this — they paste it into their own terminal:
+
+**Mac (Terminal):**
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/marlowetal653/iq-setup/main/scripts/update-skills.sh)"
+```
+
+**Windows (PowerShell):**
+```powershell
+iwr -useb https://raw.githubusercontent.com/marlowetal653/iq-setup/main/scripts/update-skills.ps1 | iex
+```
+
+This re-downloads every IQ skill, the Vercel deploy skill, and the global Claude rules. After it finishes, they need to **restart Claude Code** for the new versions to load.
+
 ## How to modify
 
 All setup instructions live in `README.md`. Edit it to change what gets installed or how Claude walks students through the process.
