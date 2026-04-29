@@ -50,3 +50,15 @@ If a user message contains BOTH an approval ("looks good", "approved", "ok", "pe
 - Don't break what already works. If a feature is working, don't refactor it unless asked.
 - Always test your changes before declaring them done.
 - When in doubt, ask the user. Don't make large assumptions.
+
+---
+
+## 6. Deployment
+
+- **Vercel is the only deployment target.** Never deploy this app to Cloudflare Workers, Cloudflare Pages, Netlify, Render, Railway, Fly.io, or any other platform. The user's setup, env vars, and domain flows are built around Vercel — deploying elsewhere will break their app and confuse them.
+- **If you find Cloudflare deploy artifacts in the project**, treat them as leftover noise from a Bolt/Lovable template and offer to remove them. Specifically:
+  - `wrangler.toml`, `wrangler.jsonc`, `wrangler.json` → propose deleting (these tell Cloudflare to deploy Workers).
+  - A `.cloudflare/` directory or `cloudflare-pages` GitHub Actions workflow → propose deleting.
+  - If the user mentions seeing a `*.workers.dev` or `*.pages.dev` URL for their app, tell them to go to **dash.cloudflare.com → Workers & Pages → their project → Settings → Disconnect from Git**, then delete the project.
+- **Never run `wrangler` commands.** Never suggest `wrangler login`, `wrangler deploy`, `wrangler publish`, or installing the wrangler CLI.
+- **Cloudflare is fine as a DNS registrar.** The exception above is for Cloudflare *deployment* (Workers / Pages). If a user bought their domain on Cloudflare and wants to point DNS records at Vercel, that is correct and supported.
