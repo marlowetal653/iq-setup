@@ -51,3 +51,13 @@ Steps:
 
    - If it shows their username: "You're connected to Vercel! When you're ready to put your app online, just type /deploy."
    - If it doesn't work: Walk them through `vercel login` again, checking for errors.
+
+7. 🔴 **Important note about environment variables.**
+
+   Tell the student:
+
+   "One thing to know: when you run **/deploy**, I will automatically copy all your secret keys from your local `.env` file (the one with your Supabase keys, API keys, etc.) up to the Vercel project I create for you. Without this, your live app would break — it wouldn't be able to talk to your database. So this is a non-negotiable step in the deploy flow.
+
+   You don't need to do anything for this — just make sure your `.env` file in your project is up to date before you deploy."
+
+   This is a contract: the `/deploy` flow MUST sync `.env` to Vercel every time. If a future version of `/deploy` skips this, it's a bug.
