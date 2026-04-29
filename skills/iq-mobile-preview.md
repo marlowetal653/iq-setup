@@ -1,11 +1,19 @@
 Start the Expo development server so the student can preview their mobile app on their phone using Expo Go.
 
 Steps:
-1. Check if this is an Expo project:
+1. Check if `expo` is installed in the project:
    - Look for `expo` in `package.json` dependencies or devDependencies
-   - If not an Expo project, tell the student: "This doesn't look like an Expo project. This command is for React Native apps built with Expo." Then stop.
+   - If not found, install it:
+     ```bash
+     npx install-expo-modules@latest
+     ```
+     If that fails, fall back to:
+     ```bash
+     npm install expo
+     ```
+     Tell the student: "Installing Expo — this is the tool that lets you run your app on your phone."
 
-2. Make sure dependencies are installed:
+2. Make sure all dependencies are installed:
    ```bash
    npm install
    ```
