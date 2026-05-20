@@ -95,45 +95,88 @@ Steps:
    - Look for a `.vercel/` directory in the project.
    - If not linked, run `vercel link` and walk the student through the prompts (create new project, confirm settings).
 
-5. 🔴 **MANDATORY — Push environment variables to Vercel.**
+5. 🔴 **MANDATORY — Push environment variables to Vercel. NEVER skip or defer this step for any reason.**
 
-   Before deploying, you MUST sync the local `.env` file to the Vercel project. Without this, the deployed app will be broken (no database connection, no API keys). Never skip this step.
+   The deployed app will be broken without this — no database, no API keys, no working app. Do not proceed to step 6 until every variable is confirmed on Vercel.
 
-   a. Check if `.env` exists in the project root:
+   a. Discover all env files. Check for these in order (later files override earlier ones):
       ```bash
-      test -f .env && echo "FOUND" || echo "MISSING"
+      for f in .env .env.production .env.local .env.production.local; do
+        [ -f "$f" ] && echo "FOUND: $f"
+      done
       ```
-      - If MISSING: Tell the student "I don't see a `.env` file — your app might not need one, or it might be named differently. If your app uses Supabase or any API keys, we need to add them to Vercel manually." If they confirm there are no env vars, continue to step 6.
-      - If FOUND: continue.
+      - If **none** exist: Check `package.json` for external services (`@supabase/supabase-js`, `openai`, `stripe`, etc.). If any are found, stop and tell the student: "Your app uses external services but I don't see any `.env` file — which means the secret keys are missing. Your live app won't be able to connect to its database or APIs. Please create a `.env` file with your Supabase (or other) credentials, then come back." Do not deploy until this is resolved.
+      - If at least one env file exists, continue.
 
-   b. Tell the student: "I'm copying your secret keys from `.env` over to Vercel — this is what lets your live app connect to your database, just like it does on your computer."
+   b. Tell the student: "I'm copying your secret keys to Vercel — this is what lets your live app connect to your database, exactly like it does on your computer."
 
-   c. For each variable in `.env`, push it to all three Vercel environments (production, preview, development). Run from the project root:
+   c. Merge all env files and push every variable to all three Vercel environments. Track successes and failures:
       ```bash
-      while IFS= read -r line || [ -n "$line" ]; do
-        [ -z "$line" ] && continue
-        case "$line" in \#*) continue ;; esac
-        name="${line%%=*}"
-        value="${line#*=}"
-        name=$(echo "$name" | xargs)
-        [ -z "$name" ] && continue
-        value="${value%\"}"; value="${value#\"}"
-        value="${value%\'}"; value="${value#\'}"
+      FAILED_VARS=""
+      SYNCED_COUNT=0
+
+      declare -A ENV_VARS
+      for f in .env .env.production .env.local .env.production.local; do
+        [ ! -f "$f" ] && continue
+        while IFS= read -r line || [ -n "$line" ]; do
+          [ -z "$line" ] && continue
+          case "$line" in \#*) continue ;; esac
+          [[ "$line" != *=* ]] && continue
+          name="${line%%=*}"
+          value="${line#*=}"
+          name="$(echo "$name" | xargs)"
+          [ -z "$name" ] && continue
+          value="${value%\"}"; value="${value#\"}"
+          value="${value%\'}"; value="${value#\'}"
+          ENV_VARS["$name"]="$value"
+        done < "$f"
+      done
+
+      for name in "${!ENV_VARS[@]}"; do
+        value="${ENV_VARS[$name]}"
+        var_ok=true
         for target in production preview development; do
           vercel env rm "$name" "$target" --yes >/dev/null 2>&1
-          printf '%s' "$value" | vercel env add "$name" "$target" >/dev/null 2>&1
+          if ! printf '%s' "$value" | vercel env add "$name" "$target" >/dev/null 2>&1; then
+            var_ok=false
+          fi
         done
-        echo "Synced: $name"
-      done < .env
+        if $var_ok; then
+          echo "✓ $name"
+          ((SYNCED_COUNT++))
+        else
+          echo "✗ FAILED: $name"
+          FAILED_VARS="$FAILED_VARS $name"
+        fi
+      done
+
+      echo ""
+      echo "Synced $SYNCED_COUNT variable(s)."
+      [ -n "$FAILED_VARS" ] && echo "FAILED:$FAILED_VARS"
       ```
 
-   d. Verify the push worked:
+   d. If any variables failed, retry each one individually with error output visible:
       ```bash
-      vercel env ls
+      # Replace NAME and VALUE with the actual values
+      vercel env rm NAME production --yes 2>/dev/null
+      printf '%s' "VALUE" | vercel env add NAME production
+      # repeat for preview and development
       ```
-      Confirm each variable from `.env` appears. If any are missing, retry that variable individually.
+      If a variable still fails after retry, stop and tell the student exactly which one failed and show the error. Do not move to step 6 until all variables are synced.
 
-   e. Tell the student: "Your secret keys are now on Vercel. Your live app will use the same database and settings as your local version."
+   e. 🔴 **Active verification — required.** Pull the live list and diff against what was synced:
+      ```bash
+      vercel env ls 2>&1
+      ```
+      For every variable you pushed, confirm its name appears in the output. If any are missing:
+      - Retry that specific variable.
+      - If it still doesn't appear, stop and tell the student: "The variable `NAME` didn't make it to Vercel. Let's fix this before deploying — please run `vercel env add NAME` in your terminal, paste in the value, and select all three environments."
+
+   f. **Supabase key check.** If `package.json` contains `@supabase/supabase-js`, verify the synced vars include both a URL key (one of: `VITE_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_URL`, `SUPABASE_URL`) and an anon key (one of: `VITE_SUPABASE_ANON_KEY`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_ANON_KEY`). If either is missing, stop and tell the student: "Your app uses Supabase but I don't see the Supabase URL or key in your env files. Without these, your live app won't connect to its database. Please add them to your `.env` file — you can find the values in your Supabase project under Settings → API."
+
+   g. **.env.example gap check.** If a `.env.example` exists, compare it against the merged vars. For each variable name in `.env.example` that was NOT synced, warn the student: "Your `.env.example` mentions `NAME` but I didn't find a value for it in your env files. If your app needs this variable it won't work live — do you have a value for it?"
+
+   h. Tell the student: "All your secret keys are on Vercel. Your live app will use the same database and settings as your local version."
 
 6. Deploy to production:
    ```bash
@@ -142,27 +185,34 @@ Steps:
 
 7. Wait for the deployment to complete. Capture the live URL from the output.
 
-8. Give the student their live URL and open it:
+8. **Post-deploy health check.** Before telling the student anything, verify the app actually responds:
+   ```bash
+   curl -s -o /dev/null -w "%{http_code}" --max-time 15 <LIVE_URL>
+   ```
+   - If the status code is `200`–`399`: the app is up. Continue to step 9.
+   - If the status code is `4xx` or `5xx`, or the request times out: Run `vercel logs --limit 50` immediately, read the error output, and attempt to fix the problem yourself. Common causes: missing env var (recheck step 5e), build error, wrong framework output directory. Fix and redeploy before telling the student. Only escalate to the student if you cannot identify the root cause after one fix attempt.
+
+9. Give the student their live URL and open it:
    - **Mac:** `open <URL>`
    - **Windows:** `start <URL>`
    - Tell the student: "Your app is now live on the internet! Anyone with this link can use it."
 
-9. Check the URL type. If the URL is a free Vercel subdomain (ends in `.vercel.app`), tell the student:
+10. Check the URL type. If the URL is a free Vercel subdomain (ends in `.vercel.app`), tell the student:
 
    "Right now your app is on a free Vercel URL — something like `your-app.vercel.app`. This works great and is totally fine to use! But if you want a custom domain like `yourname.com` or `myapp.io`, we can set that up too."
 
    Ask: "Would you like to get your own custom domain, or is the free URL good for now?"
 
    - If the student says the free URL is fine, say: "You're all set! You can always add a custom domain later by typing /iq-deploy-to-vercel and asking about it." Then stop here.
-   - If the student wants a custom domain, continue to step 10.
+   - If the student wants a custom domain, continue to step 11.
 
    If the URL is already on a custom domain (not `.vercel.app`), tell the student: "Your app is live on your custom domain!" Then stop here.
 
-10. Ask the student:
+11. Ask the student:
 
     "Do you want to **purchase a new domain**, or do you **already own a domain** you'd like to connect?"
 
-11. If the student wants to **purchase a new domain**:
+12. If the student wants to **purchase a new domain**:
 
    Walk them through buying directly on Vercel:
    "1. Go to your Vercel dashboard at **https://vercel.com** in your browser."
@@ -177,7 +227,7 @@ Steps:
    ```
    Tell the student: "Your custom domain is connected! Your app should be live at `yourdomain.com` in a few minutes."
 
-12. If the student **already owns a domain**:
+13. If the student **already owns a domain**:
 
     - Ask: "What's your domain?" (e.g., `mycoolapp.com`)
     - Add it to the Vercel project:
